@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/reddishPink"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+  <!--  <include
+        android:id="@+id/toolInclude"
+        layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top" />
+    -->
+    <TextView
+        android:id="@+id/addProductText"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="ADD PRODUCT"
+        android:textAlignment="center"
+        android:padding="10dp"
+        android:layout_marginBottom="50dp"
+        />
+
+    <EditText
+        android:id="@+id/adPName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Product Name"
+        android:padding="10dp"
+        android:textSize="15dp" />
+
+    <EditText
+        android:id="@+id/adPUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Product URL"
+        android:padding="10dp"
+        android:textSize="15dp" />
+
+    <EditText
+        android:id="@+id/adPImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Poduct image URL"
+        android:padding="10dp"
+        android:textSize="15dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/b1Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cancel"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/b2save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</LinearLayout>

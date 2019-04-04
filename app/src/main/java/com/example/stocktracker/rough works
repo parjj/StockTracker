@@ -1,0 +1,135 @@
+companylistfragment----> productfragment---->addproductfragment
+
+check the working of floating button too
+
+
+
+
+
+
+imageview1.setImageBitmap(webview1.getFavicon());
+
+private Bitmap fetchFavicon(Uri uri) {
+        final Uri iconUri = uri.buildUpon().path("favicon.ico").build();
+        Log.i(TAG, "Fetching favicon from: " + iconUri);
+
+        InputStream is = null;
+        BufferedInputStream bis = null;
+        try
+        {
+            URLConnection conn = new URL(iconUri.toString()).openConnection();
+            conn.connect();
+            is = conn.getInputStream();
+            bis = new BufferedInputStream(is, 8192);
+            return BitmapFactory.decodeStream(bis);
+        } catch (IOException e) {
+            Log.w(TAG, "Failed to fetch favicon from " + iconUri, e);
+            return null;
+        }
+    }
+     //imageView.setImageResource(imageResValues[position]);
+     //   public CompanyListAdapter(Context context, Integer[] imageResValues, List<Company> companyList) {
+
+https://userscontent2.emaze.com/images/dc1bd939-2c82-4b65-9a4a-d30754860c2c/e90b0328-8342-4ab9-9661-3f83690e1d51image01.png    Tesla
+https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png                 Google
+https://i.pinimg.com/originals/d2/f0/0d/d2f00d72bc1f8526e76a8a1a2ccb475d.png                                                   Apple
+http://1.bp.blogspot.com/-RRnuo67oT2c/UgF29or5qwI/AAAAAAAAO_I/zM9Dr5e3QvM/s1600/Twitter+for+Android.png                        Twitter
+
+listView.getAdapter().getItemCount();
+@Override
+protected void onRestoreInstanceState (Bundle savedInstanceState) {
+    this.mPersonList = savedInstanceState.getStringArrayList("mPersonList"); //on coming back retrieve all values using key
+        }
+
+
+  //Picasso.get().load("http://i.imgur.com/DvpvklR.png").into(imageView);
+        //Picasso.get().load(R.drawable.X).into(imageView);
+
+
+        // find your RecyclerView
+         RecyclerView recyclerView = (RecyclerView) view
+
+        .findViewById(http://R.id.product_list_recycler_view);
+
+        //Attach a Layout Manager to it
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(
+
+        getActivity().getBaseContext()));
+
+        //Add Adapter to it
+
+        recyclerView.setAdapter(new ProductListAdapter(subcategoryKey,
+
+        getActivity(), isShoppingList));
+
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="10dp"
+        android:orientation="vertical" />
+
+
+You don't need to override onCreateOptionsMenu in your Fragment class again. Menu items can be changed (Add/remove) by overriding onPrepareOptionsMenumethod available in Fragment.
+
+@Override
+public void onPrepareOptionsMenu(Menu menu) {
+    menu.findItem(R.id.action_newItem).setVisible(true);
+    super.onPrepareOptionsMenu(menu);
+
+}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_add, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        return super.onOptionsItemSelected(item);
+    }
+----------------------------------------------------------------------------------------------------
+ <android.support.design.widget.FloatingActionButton
+        android:id="@+id/cFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end|right"
+        android:layout_margin="13dp"
+        android:backgroundTint="@color/reddishPink"
+        android:src="@android:drawable/ic_input_add" />
+
+        //  actionButton = view.findViewById(R.id.cFab);
+         actionButton.bringToFront();
+                        actionButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                        Log.d("value", String.valueOf(v.getId()));
+
+                    }
+
+                });
+--------------------------------------------------------------------------------------------------------------
+
+
+  /* @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_edit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String text = item.getTitle().toString();
+       Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        return super.onOptionsItemSelected(item);
+    }*/
+    -----------------------------------------------

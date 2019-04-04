@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/c"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolInclude"
+        layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+     <ListView
+         android:id="@android:id/list"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:id="@+id/company_emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="50dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/eCtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_margin="50dp"
+            android:text="Add a few of these company's product to track"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            />
+
+        <Button
+            android:id="@+id/eCbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="+ Add Company"
+            android:backgroundTint="@android:color/background_light"
+            android:layout_marginBottom="20dp"
+            />
+
+    </LinearLayout>
+</LinearLayout>

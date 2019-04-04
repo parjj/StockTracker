@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightPink"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black">
+
+        <ImageView
+            android:id="@+id/pImgView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/pCompanyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pImgView"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="company name and code"
+            android:textColor="@android:color/holo_orange_light" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/pList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/pCompanyName"
+        android:layout_marginTop="5dp"
+        android:padding="5dp">
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="50dp"
+        android:visibility="gone"
+        android:id="@+id/product_emptyLayout">
+
+    <TextView
+        android:id="@+id/etext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add a few of these company's product to track"
+        android:textAlignment="center"
+        android:layout_margin="50dp"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        />
+
+    <Button
+        android:id="@+id/ebutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+ Add Product"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/background_light"
+        android:layout_marginBottom="20dp"
+        />
+
+    </LinearLayout>
+</LinearLayout>
+
+
+

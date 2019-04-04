@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <TextView
+        android:id="@+id/etext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add a few of these company's
+        product to track"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        />
+
+    <Button
+        android:id="@+id/ebutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+ Add Product"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/etext"
+        />
+</android.support.constraint.ConstraintLayout>
