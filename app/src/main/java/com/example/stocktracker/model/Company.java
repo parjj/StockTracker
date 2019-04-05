@@ -41,6 +41,10 @@ public class Company implements Serializable {
         this.product = product;
     }
 
+    public Company() {
+    }
+
+
 
     public String getCompany_name() {
         return company_name;
@@ -74,8 +78,6 @@ public class Company implements Serializable {
         this.url = url;
     }
 
-    public Company() {
-    }
 
     public String getCompany_stockName() {
         return company_stockName;

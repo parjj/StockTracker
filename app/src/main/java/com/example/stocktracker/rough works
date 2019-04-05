@@ -3,7 +3,34 @@ companylistfragment----> productfragment---->addproductfragment
 check the working of floating button too
 
 
+-------------------------------------
 
+add product toolbar
+
+/*        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.sepia));
+        toolbar_button= view.findViewById(R.id.toolbarButton);
+        toolbar_buttonEnd= view.findViewById(R.id.toolbarButtonEnd);
+        TextView toolbar_textview = view.findViewById(R.id.toolbarText);
+        toolbar_button.setBackgroundResource(R.drawable.ic_arrow_back_black_24dp);
+        //toolbar_button.setTextColor(getResources().getColor(R.color.peralishWhite));
+       // toolbar_textview.setTextSize(16);
+        toolbar_textview.setText("Add Product");
+        toolbar_buttonEnd.setText("Save");
+        toolbar_textview.setTextColor(getResources().getColor(R.color.greenishGrayBlack));
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);*/
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(PRODUCT_CLASS, product);
+
+        return true;
+    }
 
 
 
@@ -29,12 +56,24 @@ private Bitmap fetchFavicon(Uri uri) {
     }
      //imageView.setImageResource(imageResValues[position]);
      //   public CompanyListAdapter(Context context, Integer[] imageResValues, List<Company> companyList) {
-
+----------------------------------------------------------------------------------------------------------------------------------------
 https://userscontent2.emaze.com/images/dc1bd939-2c82-4b65-9a4a-d30754860c2c/e90b0328-8342-4ab9-9661-3f83690e1d51image01.png    Tesla
-https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png                 Google
+https://image.flaticon.com/teams/slug/google.jpg                                                    Google
 https://i.pinimg.com/originals/d2/f0/0d/d2f00d72bc1f8526e76a8a1a2ccb475d.png                                                   Apple
 http://1.bp.blogspot.com/-RRnuo67oT2c/UgF29or5qwI/AAAAAAAAO_I/zM9Dr5e3QvM/s1600/Twitter+for+Android.png                        Twitter
 
+https://icdn4.digitaltrends.com/image/google-home-security-thumb-2-1500x1000.jpg       google home
+https://www.bestbuy.com/site/google-home-smart-speaker-with-google-assistant-white-slate/5578849.p?skuId=5578849  google home buy
+
+
+products url
+Tesla t shirt   https://www.cafepress.com/+,1293115580/?utm_medium=cpc&utm_source=pla-google&utm_campaign=653161166-d-c&utm_content=31173505377-adid-96354654250&utm_term=pla-585005665864-pid-1293115580&gclid=EAIaIQobChMI2d6frOu54QIVi-DICh092QsZEAQYCSABEgIDV_D_BwE
+Tesla tshirt image url https://i3.cpcache.com/merchandise/497_550x550_Front_Color-WithCheckerPant.jpg?Size=Small&AttributeValue=NA&region={"name":"FrontCenter","width":10,"height":10,"alignment":"TopCenter","orientation":0,"dpi":100,"crop_x":0,"crop_y":0,"crop_h":1000,"crop_w":1000,"scale":0,"template":{"id":88800272,"params":{}}}
+
+apple
+
+speaker    https://cdn.vox-cdn.com/thumbor/N6jaV5b3Fbc_U7t7IXHqBJgZk-w=/0x0:2040x1360/1200x800/filters:focal(857x517:1183x843)/cdn.vox-cdn.com/uploads/chorus_image/image/58421759/v_8A0A9690.0.jpg
+------------------------------------------------------------------------------------------------------------------------------------------
 listView.getAdapter().getItemCount();
 @Override
 protected void onRestoreInstanceState (Bundle savedInstanceState) {
@@ -133,3 +172,32 @@ public void onPrepareOptionsMenu(Menu menu) {
         return super.onOptionsItemSelected(item);
     }*/
     -----------------------------------------------
+
+        //    bundle.putSerializable(COMPANY_CLASS,company);
+             FragmentManager fragmentManager = getFragmentManager();
+                     //   FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        //                CompanyListFragment companyListFragment = new CompanyListFragment();
+                    //    fragmentTransaction.add(R.id.fragment_container, companyListFragment);
+                    //    companyListFragment.setArguments(bundle);
+
+-----------------------------------------------------------
+
+ /* List<Fragment> fg= getFragmentManager().getFragments();
+                ProductFragment pd= new ProductFragment();
+                if(fg.contains(pd)){}*/
+
+
+   ArrayList a = new ArrayList();
+                ProductFragment p1= new ProductFragment();
+                ProductFragment p2= new ProductFragment();
+                ProductFragment p3= new ProductFragment();
+
+
+                a.add(p1);
+                a.add(p2);
+
+                a.contains(p3);
+ why cant we call adapter.notifydatasetchanged inside menu
+
+ also how to use get and set method of product and company inside   db check dbexample
+ ----------------------------------------------------------------------------------------------

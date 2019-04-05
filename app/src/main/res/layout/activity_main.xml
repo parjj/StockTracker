@@ -8,8 +8,9 @@
     android:orientation="horizontal">
 
     <fragment
-        class="com.example.stocktracker.fragments.CompanyListFragment"
+        class="com.example.stocktracker.fragments.company.CompanyListFragment"
         android:layout_width="match_parent"
+        android:tag="fragment_tag"
         android:layout_height="match_parent" />
 
 </FrameLayout>

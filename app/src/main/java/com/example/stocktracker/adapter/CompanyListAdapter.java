@@ -12,8 +12,6 @@ import com.example.stocktracker.R;
 import com.example.stocktracker.model.Company;
 import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class CompanyListAdapter extends ArrayAdapter {
@@ -22,7 +20,7 @@ public class CompanyListAdapter extends ArrayAdapter {
 
     public CompanyListAdapter(Context context, List<Company> companyList) {
 
-        super(context, R.layout.custom_companyitem_list, companyList);
+        super(context, R.layout.company_listitem_layout, companyList);
         this.companyList = companyList;
 
     }
@@ -35,7 +33,7 @@ public class CompanyListAdapter extends ArrayAdapter {
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = layoutInflater.inflate(R.layout.custom_companyitem_list, parent, false);
+            View view = layoutInflater.inflate(R.layout.company_listitem_layout, parent, false);
             convertView = view;
         }
 
@@ -45,14 +43,12 @@ public class CompanyListAdapter extends ArrayAdapter {
         TextView text_rate = convertView.findViewById(R.id.rate);
 
         if(company !=null) {
-
         company.setRate(899.00);
-        Picasso.get().load(company.getUrl()).resize(72,72).into(imageView);
+        Picasso.get().load(company.getUrl()).resize(300,300).into(imageView);
         text_name.setText(company.getCompany_name());
-        text_code.setText(company.getCompany_stockName());
+        text_code.setText("("+company.getCompany_stockName()+")");
         text_rate.setText(String.valueOf("Rate :" + "$" + company.getRate()));
         }
-
 
         return convertView;
 

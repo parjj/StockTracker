@@ -15,7 +15,7 @@ public class Product implements Serializable {
         this.product_image = product_image;
     }
 
-
+    public Product(){}
 
     public String getProduct_name() {
         return product_name;

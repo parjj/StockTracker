@@ -4,30 +4,19 @@
     android:layout_height="match_parent"
     android:background="@color/reddishPink"
     android:gravity="center_vertical"
+    android:layout_margin="20dp"
     android:orientation="vertical">
 
-    <include
+   <!-- <include
         android:id="@+id/toolInclude"
         layout="@layout/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top" />
+        android:layout_gravity="top" />-->
 
-    <TextView
-        android:id="@+id/addProductText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/border"
-        android:padding="15dp"
-        android:text="ADD PRODUCT"
-        android:textAlignment="center"
-        android:textSize="21dp"
-        android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/adPName"
+        android:id="@+id/editPName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Product Name"
@@ -36,7 +25,7 @@
         android:textSize="15dp" />
 
     <EditText
-        android:id="@+id/adPUrl"
+        android:id="@+id/editPUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Product URL"
@@ -51,26 +40,13 @@
         android:padding="10dp"
         android:textSize="15dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/b1Cancel"
-            android:layout_width="wrap_content"
+            android:id="@+id/editDeleteCancel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:text="cancel" />
+            android:text="Delete" />
 
-        <Button
-            android:id="@+id/b2save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:text="save" />
-    </LinearLayout>
 
 </LinearLayout>

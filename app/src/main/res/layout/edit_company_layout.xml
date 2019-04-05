@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/reddishPink"
+    android:gravity="center_vertical"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/editCName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="company Name"
+        android:padding="10dp"
+        android:textSize="15dp" />
+
+    <EditText
+        android:id="@+id/editCCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cursorVisible="true"
+        android:hint="Company Code"
+        android:padding="10dp"
+        android:textSize="15dp" />
+
+    <EditText
+        android:id="@+id/editCImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Company image URL"
+        android:padding="10dp"
+        android:textSize="15dp" />
+
+
+        <Button
+            android:id="@+id/editCdelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Delete" />
+
+
+
+</LinearLayout>

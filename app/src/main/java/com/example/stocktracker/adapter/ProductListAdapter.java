@@ -10,28 +10,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.model.Company;
 import com.example.stocktracker.model.Product;
+import com.squareup.picasso.Picasso;
 
-public class ProductListAdapter  extends ArrayAdapter {
+import java.util.List;
 
-    ImageView imageViewP;
-    TextView nameP,rateP;
-    private Product product;
+public class ProductListAdapter extends ArrayAdapter {
 
 
-    public ProductListAdapter( Context context, Product product) {
+    private List<Product> productList;
 
-        super(context, R.layout.product_list_layout);
-        this.product=product;
+
+    public ProductListAdapter(Context context, List<Product> productList) {
+
+        super(context, R.layout.product_list_layout,productList);
+        this.productList = productList;
     }
 
 
-
-
-
     @Override
-    public View getView(int position,  View convertView,  ViewGroup parent) {
-       // Product  product= new Product();
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        Product product = (Product) getItem(position);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -39,13 +40,18 @@ public class ProductListAdapter  extends ArrayAdapter {
             convertView = view;
         }
 
-         imageViewP = convertView.findViewById(R.id.product_image);
-         nameP = convertView.findViewById(R.id.product_name);
-         rateP = convertView.findViewById(R.id.pRate);
+        ImageView imageViewP = convertView.findViewById(R.id.product_image);
+        TextView nameP = convertView.findViewById(R.id.product_name);
+        TextView rateP = convertView.findViewById(R.id.product_rate);
 
+
+        if (product != null) {
+            Picasso.get().load(product.getProduct_image()).resize(300, 300).into(imageViewP);
+            nameP.setText(product.getProduct_name());
+            rateP.setText("$ 120");
+        }
 
         //  Picasso.get().load(R.drawable.X).into(imageView)
-
 
 
         return convertView;
