@@ -43,7 +43,7 @@ public class CompanyListAdapter extends ArrayAdapter {
         TextView text_rate = convertView.findViewById(R.id.rate);
 
         if(company !=null) {
-        company.setRate(899.00);
+        company.setRate(299.00);
         Picasso.get().load(company.getUrl()).resize(300,300).into(imageView);
         text_name.setText(company.getCompany_name());
         text_code.setText("("+company.getCompany_stockName()+")");
