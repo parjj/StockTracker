@@ -3,50 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/reddishPink"
-    android:gravity="center_vertical"
-    android:layout_margin="20dp"
     android:orientation="vertical">
 
-   <!-- <include
+    <include
         android:id="@+id/toolInclude"
         layout="@layout/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top" />-->
+        android:layout_gravity="top" />
 
-
-    <EditText
-        android:id="@+id/editPName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Product Name"
-        android:cursorVisible="true"
-        android:padding="10dp"
-        android:textSize="15dp" />
+        android:padding="5dp"
+        android:layout_marginTop="150dp"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editPUrl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Product URL"
-        android:padding="10dp"
-        android:textSize="15dp" />
+        <EditText
+            android:id="@+id/editPName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="true"
+            android:hint="Product Name"
+            android:padding="10dp"
+            android:textSize="15dp" />
 
-    <EditText
-        android:id="@+id/adPImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Poduct image URL"
-        android:padding="10dp"
-        android:textSize="15dp" />
 
+        <EditText
+            android:id="@+id/editPUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product URL"
+            android:padding="10dp"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/editPImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Poduct image URL"
+            android:padding="10dp"
+            android:textSize="15dp" />
 
         <Button
-            android:id="@+id/editDeleteCancel"
+            android:id="@+id/deleteB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:text="Delete" />
-
+    </LinearLayout>
 
 </LinearLayout>

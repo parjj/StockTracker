@@ -59,15 +59,20 @@ private Bitmap fetchFavicon(Uri uri) {
 ----------------------------------------------------------------------------------------------------------------------------------------
 https://userscontent2.emaze.com/images/dc1bd939-2c82-4b65-9a4a-d30754860c2c/e90b0328-8342-4ab9-9661-3f83690e1d51image01.png    Tesla
 https://image.flaticon.com/teams/slug/google.jpg                                                    Google
-https://i.pinimg.com/originals/d2/f0/0d/d2f00d72bc1f8526e76a8a1a2ccb475d.png                                                   Apple
+https://cdn4.iconfinder.com/data/icons/socialcones/508/Apple-512.png                                                   Apple
 http://1.bp.blogspot.com/-RRnuo67oT2c/UgF29or5qwI/AAAAAAAAO_I/zM9Dr5e3QvM/s1600/Twitter+for+Android.png                        Twitter
 
 https://icdn4.digitaltrends.com/image/google-home-security-thumb-2-1500x1000.jpg       google home
 https://www.bestbuy.com/site/google-home-smart-speaker-with-google-assistant-white-slate/5578849.p?skuId=5578849  google home buy
+https://static.bhphoto.com/images/images500x500/apple_z0uv_mq423_bh_macbook_air_i7_8gb_1544477238000_1343177.jpg  apple macbook
 
 
 products url
-Tesla t shirt   https://www.cafepress.com/+,1293115580/?utm_medium=cpc&utm_source=pla-google&utm_campaign=653161166-d-c&utm_content=31173505377-adid-96354654250&utm_term=pla-585005665864-pid-1293115580&gclid=EAIaIQobChMI2d6frOu54QIVi-DICh092QsZEAQYCSABEgIDV_D_BwE
+
+Tesla Race chip https://www.racechip.us/shop/tesla/model-s-from-2012/p100d-1ccm-757hp-568kw-680lb-ft.html?gclid=EAIaIQobChMIxuu_tq7B4QIVSFuGCh3b3gL8EAkYESABEgK9V_D_BwE
+race chip image https://www.racechip.us/media/wysiwyg/shop_images/xlr_controller_768-992.png
+Apple mac book  https://www.bhphotovideo.com/c/product/1343177-REG/apple_z0uv_mq423_bh_macbook_air_i7_8gb.html/?ap=y&gclid=EAIaIQobChMIz_G83YzB4QIVTuDICh194Q2uEAQYAiABEgJf0fD_BwE&lsft=BI%3A514&smp=Y
+Tesla t shirt   https://www.cafepress.com/+,1293115580/?utm_medium=cpc&utm_source=pla-google&utm_campaign=653161166-d-c&utm_content=31173505377-adid-96354654250&utm_term=pla-585005665864-pid-1293115580&gclid=EAIaIQobChMI-Ivji6_B4QIVAUCGCh3hKARaEAYYBCABEgIQD_D_BwE
 Tesla tshirt image url https://i3.cpcache.com/merchandise/497_550x550_Front_Color-WithCheckerPant.jpg?Size=Small&AttributeValue=NA&region={"name":"FrontCenter","width":10,"height":10,"alignment":"TopCenter","orientation":0,"dpi":100,"crop_x":0,"crop_y":0,"crop_h":1000,"crop_w":1000,"scale":0,"template":{"id":88800272,"params":{}}}
 
 apple
@@ -201,3 +206,32 @@ public void onPrepareOptionsMenu(Menu menu) {
 
  also how to use get and set method of product and company inside   db check dbexample
  ----------------------------------------------------------------------------------------------
+ /* @Override
+     public boolean onOptionsItemSelected(MenuItem item) {
+
+         int i = item.getItemId();
+         FragmentManager fm = getFragmentManager();
+         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+         List<Fragment> fg = getFragmentManager().getFragments();
+
+         switch (item.getItemId()) {
+             case R.id.addMenuP:
+                 AddProductFragment addProductFragment = new AddProductFragment();
+                 fm.getFragments().add(addProductFragment);
+                 fragmentTransaction.add(R.id.fragment_container, addProductFragment);
+                 fragmentTransaction.addToBackStack("product_fragmentlist");
+                 fragmentTransaction.commit();
+                 break;
+
+             case R.id.addMenu:
+                 AddCompanyFragment addCompanyFragment = new AddCompanyFragment();
+                 fragmentTransaction.add(R.id.fragment_container, addCompanyFragment);
+                 fragmentTransaction.addToBackStack("company_fragmentlist");
+                 fragmentTransaction.commit();
+                 break;
+         }
+
+         return true;
+     }
+ */

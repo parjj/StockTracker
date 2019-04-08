@@ -24,15 +24,11 @@ public class AddProductFragment extends Fragment {
     EditText productName, productUrl, productImage;
     Button save, cancel;
     Product product= new Product();
-    Company company=new Company();
-    Button toolbar_button, toolbar_buttonEnd;
-
-    public static final String PRODUCT_CLASS = "product value";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
 
     }
 
@@ -68,13 +64,7 @@ public class AddProductFragment extends Fragment {
                 product.setProduct_url(url);
                 product.setProduct_image(image);
 
-
                 ProductFragment productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
-
-
-
-
-                //ProductFragment productFragment = (ProductFragment) getFragmentManager().getFragments().get(1);
                 productFragment.productNames.add(product);
                 productFragment.reload();
 

@@ -50,10 +50,6 @@ public class ProductListAdapter extends ArrayAdapter {
             nameP.setText(product.getProduct_name());
             rateP.setText("$ 120");
         }
-
-        //  Picasso.get().load(R.drawable.X).into(imageView)
-
-
         return convertView;
 
     }

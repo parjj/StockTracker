@@ -23,6 +23,7 @@ public class CompanyListAdapter extends ArrayAdapter {
         super(context, R.layout.company_listitem_layout, companyList);
         this.companyList = companyList;
 
+
     }
 
     @Override
@@ -44,7 +45,7 @@ public class CompanyListAdapter extends ArrayAdapter {
 
         if(company !=null) {
         company.setRate(299.00);
-        Picasso.get().load(company.getUrl()).resize(300,300).into(imageView);
+        Picasso.get().load(company.getUrl()).resize(128,128).into(imageView);
         text_name.setText(company.getCompany_name());
         text_code.setText("("+company.getCompany_stockName()+")");
         text_rate.setText(String.valueOf("Rate :" + "$" + company.getRate()));
@@ -55,13 +56,4 @@ public class CompanyListAdapter extends ArrayAdapter {
     }
 
 }
-/*
--------------------
 
-why is this company getting 4 calls on adding new company ,
-adapter is getting empty instead of retaining its values.
-on adding the value shd be reatained in companylist in fragment
-
-
-
-*/

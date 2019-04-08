@@ -6,12 +6,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/toolInclude"
-        layout="@layout/toolbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top" />
+
 
     <TextView
         android:id="@+id/addProductText"

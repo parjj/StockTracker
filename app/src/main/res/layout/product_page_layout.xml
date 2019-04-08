@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:background="@drawable/border" />
+             />
 
         <TextView
             android:id="@+id/pCompanyName"

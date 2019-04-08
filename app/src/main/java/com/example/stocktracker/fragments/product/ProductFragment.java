@@ -2,15 +2,11 @@ package com.example.stocktracker.fragments.product;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +18,6 @@ import android.widget.TextView;
 
 import com.example.stocktracker.R;
 import com.example.stocktracker.adapter.ProductListAdapter;
-import com.example.stocktracker.fragments.company.AddCompanyFragment;
 import com.example.stocktracker.model.Company;
 import com.example.stocktracker.model.Product;
 import com.squareup.picasso.Picasso;
@@ -39,20 +34,19 @@ public class ProductFragment extends Fragment {
     ListView listView;
     List<Product> productNames;
 
-    FloatingActionButton actionButton;
     Bundle bundle;
+    Button toolbar_button;
 
     public static final String COMPANY_VALUE = "company value";
-    public static final String PRODUCT_CLASS = "product value";
+    public static final String PRODUCT_VALUE = "product value";
     public static final String PRODUCT_FRAGMENT = "product_fragment";
-    public static final String ADD_PRODUCT_TAG = "add_product_fragment";
 
     ProductListAdapter productListAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -65,9 +59,9 @@ public class ProductFragment extends Fragment {
         Company company = (Company) bundle.getSerializable(COMPANY_VALUE);
 
 
-        //Toolbar            //not owrking the old values of toolbar with new ones
+        //Toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        Button toolbar_button = view.findViewById(R.id.toolbarButton);
+        toolbar_button = view.findViewById(R.id.toolbarButton);
         TextView toolbar_textview = view.findViewById(R.id.toolbarText);
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.reddishPink));
@@ -79,16 +73,13 @@ public class ProductFragment extends Fragment {
         toolbar_textview.setTextSize(20);
         toolbar_textview.setTextColor(getResources().getColor(R.color.darkBrown));
 
-        //((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
-        toolbar.inflateMenu(R.menu.menu_padd);
+        toolbar.inflateMenu(R.menu.menu_add);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
-
                 AddProductFragment addProductFragment = new AddProductFragment();
                 fm.getFragments().add(addProductFragment);
                 fragmentTransaction.add(R.id.fragment_container, addProductFragment);
@@ -98,6 +89,7 @@ public class ProductFragment extends Fragment {
                 return false;
             }
         });
+
 
 
         logo = view.findViewById(R.id.pImgView);
@@ -125,32 +117,32 @@ public class ProductFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Bundle bundle = new Bundle();
+
+                Product product = (Product) productListAdapter.getItem(position);
+                bundle.putSerializable(PRODUCT_VALUE, product);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                ProductSelectFragment productSelectFragment = new ProductSelectFragment();
-                fragmentTransaction.add(R.id.fragment_container, productSelectFragment);
+                ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+                fragmentTransaction.add(R.id.fragment_container, productDetailFragment,"prodselect_fragment");
+                productDetailFragment.setArguments(bundle);
                 fragmentTransaction.addToBackStack(PRODUCT_FRAGMENT);
                 fragmentTransaction.commit();
             }
         });
 
+        toolbar_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
 
     }
-
-    //menu
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        inflater.inflate(R.menu.menu_padd,menu);
-//    }
 
     //adapter notify
     public void reload() {
         productListAdapter.notifyDataSetChanged();
     }
-
-
-
-
 
 }

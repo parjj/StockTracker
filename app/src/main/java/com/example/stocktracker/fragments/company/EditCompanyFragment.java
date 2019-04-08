@@ -23,7 +23,7 @@ public class EditCompanyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view= inflater.inflate(R.layout.edit_company_layout, container, false);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
 

@@ -53,11 +53,8 @@ public class AddCompanyFragment extends Fragment {
                 company.setUrl(cImageUrl.getText().toString());
 
                 CompanyListFragment companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
-
                 companyListFragment.companyNames.add(company);
-
                 companyListFragment.reload();
-
                 manager.popBackStack();
             }
 
