@@ -34,7 +34,7 @@ public class EditProductFragment extends Fragment {
         delete = view.findViewById(R.id.deleteB);
 
 
-        ProductDetailFragment fragment = (ProductDetailFragment) getFragmentManager().findFragmentByTag("prodselect_fragment");
+        WebViewProduct fragment = (WebViewProduct) getFragmentManager().findFragmentByTag("webview_fragment");
         product= (Product)fragment.getArguments().getSerializable(PRODUCT_VALUE);
 
 
@@ -69,7 +69,7 @@ public class EditProductFragment extends Fragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                getFragmentManager().popBackStack();
             }
         });
 

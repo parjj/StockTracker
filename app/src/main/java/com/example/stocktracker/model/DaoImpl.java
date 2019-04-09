@@ -8,10 +8,22 @@ import java.util.List;
 
 public class DaoImpl implements DaoInterface {
 
+    private static DaoImpl dao= null;
+
     private List<Company> companyList;
     private List<Product> productList;
     Company companyInfo;
     Product productInfo;
+
+
+    // static method to create instance of Singleton class
+    public static DaoImpl getInstance()
+    {
+        if (dao == null)
+            dao = new DaoImpl();
+
+        return dao;
+    }
 
 
     public DaoImpl() {
@@ -22,9 +34,6 @@ public class DaoImpl implements DaoInterface {
         companyList.add(new Company("Apple","APL","https://cdn4.iconfinder.com/data/icons/socialcones/508/Apple-512.png"));
         companyList.add(new Company("Google","GLE","https://image.flaticon.com/teams/slug/google.jpg"));
         companyList.add(new Company("Tesla","TSL","https://userscontent2.emaze.com/images/dc1bd939-2c82-4b65-9a4a-d30754860c2c/e90b0328-8342-4ab9-9661-3f83690e1d51image01.png"));
-
-
-
 
     }
 
@@ -62,7 +71,7 @@ public class DaoImpl implements DaoInterface {
     }
 
     @Override
-    public List<Product> getProductForCompany(Company company) {
+    public List<Product> getProductsForCompany(Company company) {
         return productList;
     }
 

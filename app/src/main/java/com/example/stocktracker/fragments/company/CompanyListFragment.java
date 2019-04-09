@@ -34,7 +34,9 @@ public class CompanyListFragment extends Fragment {
     List<Company> companyNames;
     Button toolbar_button;
 
-    DaoInterface daoInterface = new DaoImpl();
+   // DaoInterface daoInterface= new DaoImpl();
+
+    DaoImpl dao;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,8 @@ public class CompanyListFragment extends Fragment {
 
         //listview definitions
         listView = view.findViewById(android.R.id.list);
-        companyNames= daoInterface.getAllCompanies();
+        dao=dao.getInstance();
+        companyNames= dao.getAllCompanies();
         companyListAdapter = new CompanyListAdapter(getContext(), companyNames);
         listView.setAdapter(companyListAdapter);
         listView.setEmptyView(view.findViewById(R.id.company_emptyLayout));

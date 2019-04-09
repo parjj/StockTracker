@@ -4,6 +4,32 @@ check the working of floating button too
 
 
 -------------------------------------
+short url eg.
+
+Create short URL's synchronously
+@Override
+protected void doInBackground(Void... void) {
+    String longUrl = "http://www.google.com";
+    String shortUrl = ShortURL.makeShort(longUrl);
+}
+Create short URL's asynchronously
+String longUrl = "http://www.google.com";
+TextView textView = (TextView) findViewById(R.id.textView);
+ShortURL.makeShortUrl(longUrl, new ShortUrlListener() {
+    @Override
+    public void OnFinish(String url) {
+
+        if (url != null && 0 < url.length()) {
+            textView.setText(url);
+        } else {
+            textView.setText("Error");
+        }
+
+    }
+});
+
+
+----------------------------------------------------------------------
 
 add product toolbar
 

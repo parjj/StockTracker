@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.entity.Company;
 
 public class AddCompanyFragment extends Fragment {
@@ -51,8 +52,13 @@ public class AddCompanyFragment extends Fragment {
                 company.setCompany_name(cName.getText().toString());
                 company.setCompany_stockName(cCode.getText().toString());
                 company.setUrl(cImageUrl.getText().toString());
+                DaoImpl.getInstance().addNewCompany(company);
 
+                //i am adding a dao and again i am calling the companylistfrag for adding it to the companyNames
+                //is this really necessary , can we just have one line of addNewCompany and that reflect the changes in the listView without
+                //defining the companylistfrag in this class.
                 CompanyListFragment companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
+
                 companyListFragment.companyNames.add(company);
                 companyListFragment.reload();
                 manager.popBackStack();
