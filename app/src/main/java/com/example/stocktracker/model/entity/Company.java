@@ -1,4 +1,4 @@
-package com.example.stocktracker.model;
+package com.example.stocktracker.model.entity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,22 +8,20 @@ public class Company implements Serializable {
 
     private String company_name;
     private double rate;
-    private Integer imgValue;
     private String url;
     private String company_stockName;
     private List<Product> product;
 
 
-    public Company(String company_name, double rate,Integer imgValue) {
+    public Company(String company_name, double rate) {
         this.company_name = company_name;
         this.rate = rate;
-        this.imgValue=imgValue;
+
     }
 
-    public Company(String company_name, String company_stockName,Integer imgValue) {
+    public Company(String company_name, String company_stockName) {
         this.company_name = company_name;
         this.company_stockName = company_stockName;
-        this.imgValue=imgValue;
     }
 
     public Company(String company_name, String company_stockName,String url) {
@@ -32,10 +30,9 @@ public class Company implements Serializable {
         this.url=url;
     }
 
-    public Company(String company_name, double rate, Integer imgValue, String url, String company_stockName, List<Product> product) {
+    public Company(String company_name, double rate,  String url, String company_stockName, List<Product> product) {
         this.company_name = company_name;
         this.rate = rate;
-        this.imgValue = imgValue;
         this.url = url;
         this.company_stockName = company_stockName;
         this.product = product;
@@ -60,14 +57,6 @@ public class Company implements Serializable {
 
     public void setRate(double rate) {
         this.rate = rate;
-    }
-
-    public Integer getImgValue() {
-        return imgValue;
-    }
-
-    public void setImgValue(Integer imgValue) {
-        this.imgValue = imgValue;
     }
 
     public String getUrl() {

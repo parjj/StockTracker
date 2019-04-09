@@ -5,13 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.Company;
-import com.example.stocktracker.model.Product;
+import com.example.stocktracker.model.entity.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

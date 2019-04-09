@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.example.stocktracker.R;
 import com.example.stocktracker.adapter.ProductListAdapter;
-import com.example.stocktracker.model.Company;
-import com.example.stocktracker.model.Product;
+import com.example.stocktracker.model.entity.Company;
+import com.example.stocktracker.model.entity.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -123,9 +123,10 @@ public class ProductFragment extends Fragment {
                 bundle.putSerializable(PRODUCT_VALUE, product);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                ProductDetailFragment productDetailFragment = new ProductDetailFragment();
-                fragmentTransaction.add(R.id.fragment_container, productDetailFragment,"prodselect_fragment");
-                productDetailFragment.setArguments(bundle);
+                WebViewProduct webViewProduct = new WebViewProduct();
+                //fragmentTransaction.add(R.id.fragment_container, productDetailFragment,"prodselect_fragment");
+                fragmentTransaction.add(R.id.fragment_container, webViewProduct,"webview_fragment");
+                webViewProduct.setArguments(bundle);
                 fragmentTransaction.addToBackStack(PRODUCT_FRAGMENT);
                 fragmentTransaction.commit();
             }

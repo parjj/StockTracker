@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.Company;
+import com.example.stocktracker.model.entity.Company;
 
 public class EditCompanyFragment extends Fragment {
 

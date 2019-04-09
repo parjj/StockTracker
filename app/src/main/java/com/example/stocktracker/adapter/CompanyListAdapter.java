@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.Company;
+import com.example.stocktracker.model.entity.Company;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

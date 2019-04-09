@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.Product;
+import com.example.stocktracker.model.entity.Product;
 
 public class EditProductFragment extends Fragment {
 

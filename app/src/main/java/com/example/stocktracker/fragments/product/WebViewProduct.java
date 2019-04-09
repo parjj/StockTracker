@@ -18,30 +18,26 @@ import android.widget.TextView;
 import com.example.stocktracker.R;
 import com.example.stocktracker.model.entity.Product;
 
-public class ProductDetailFragment extends Fragment {
+public class WebViewProduct extends Fragment {
 
-//try using webview class extending fragment
+
     TextView product_select;
     WebView product_web;
-    Button toolbar_button,toolbar_buttonEnd;
+    Button toolbar_button, toolbar_buttonEnd;
 
     Product product= new Product();
 
     public static final String PRODUCT_VALUE = "product value";
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view= inflater.inflate(R.layout.product_detail_layout, container, false);
-        product_web=view.findViewById(R.id.prod_web);
-        product_select=view.findViewById(R.id.prod_select);
+
+        View view= inflater.inflate(R.layout.web_view_layout, container, false);
+
+        product_web=view.findViewById(R.id.webView);
+        product_select=view.findViewById(R.id.webProdName);
 
         Bundle bundle = getArguments();
         product = (Product) bundle.getSerializable(PRODUCT_VALUE);
@@ -50,6 +46,7 @@ public class ProductDetailFragment extends Fragment {
         product_web.getSettings().setJavaScriptEnabled(true);
         product_web.setWebChromeClient(new WebChromeClient());
         product_select.setText(product.getProduct_name());
+
 
 
         //Toolbar
@@ -69,15 +66,15 @@ public class ProductDetailFragment extends Fragment {
         toolbar_textview.setText("Product Link");
         toolbar_textview.setTextSize(20);
 
-        return view;
-    }
 
+
+        return view;
+
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
 
 
         toolbar_button.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +97,6 @@ public class ProductDetailFragment extends Fragment {
                 transaction.add(R.id.fragment_container,editProductFragment,"editproduct_fragment_tag");
                 transaction.addToBackStack("product_saved");
                 transaction.commit();
-
-
-
-
-
-
             }
         });
     }

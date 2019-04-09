@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.example.stocktracker.R;
 import com.example.stocktracker.adapter.CompanyListAdapter;
 import com.example.stocktracker.fragments.product.ProductFragment;
-import com.example.stocktracker.model.Company;
+import com.example.stocktracker.model.DaoImpl;
+import com.example.stocktracker.model.DaoInterface;
+import com.example.stocktracker.model.entity.Company;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,8 @@ public class CompanyListFragment extends Fragment {
     List<Company> companyNames;
     Button toolbar_button;
 
+    DaoInterface daoInterface = new DaoImpl();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +49,7 @@ public class CompanyListFragment extends Fragment {
 
         //listview definitions
         listView = view.findViewById(android.R.id.list);
+        companyNames= daoInterface.getAllCompanies();
         companyListAdapter = new CompanyListAdapter(getContext(), companyNames);
         listView.setAdapter(companyListAdapter);
         listView.setEmptyView(view.findViewById(R.id.company_emptyLayout));

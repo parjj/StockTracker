@@ -1,4 +1,4 @@
-package com.example.stocktracker.model;
+package com.example.stocktracker.model.entity;
 
 import java.io.Serializable;
 
