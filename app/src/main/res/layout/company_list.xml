@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:text="Add Company by clicking on the right corner"
+            android:text="Add Company by clicking on the top right corner"
             android:backgroundTint="@android:color/background_light"
             android:layout_marginBottom="20dp"
             />

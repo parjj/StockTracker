@@ -39,6 +39,7 @@ public class WebViewProduct extends Fragment {
         product_web=view.findViewById(R.id.webView);
         product_select=view.findViewById(R.id.webProdName);
 
+        //get the product selected
         Bundle bundle = getArguments();
         product = (Product) bundle.getSerializable(PRODUCT_VALUE);
 
@@ -76,7 +77,7 @@ public class WebViewProduct extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
+        // back button
         toolbar_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +87,7 @@ public class WebViewProduct extends Fragment {
 
 
 
-
+        // edit button
         toolbar_buttonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +95,7 @@ public class WebViewProduct extends Fragment {
                 FragmentManager manager= getFragmentManager();
                 FragmentTransaction transaction= manager.beginTransaction();
                 EditProductFragment editProductFragment= new EditProductFragment();
-                transaction.add(R.id.fragment_container,editProductFragment,"editproduct_fragment_tag");
+                transaction.add(R.id.fragment_container,editProductFragment,"edit_product_fragment_tag");
                 transaction.addToBackStack("product_saved");
                 transaction.commit();
             }

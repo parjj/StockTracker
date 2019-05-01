@@ -10,18 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.adapter.ProductListAdapter;
+import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.entity.Product;
 
 public class AddProductFragment extends Fragment {
 
     EditText productName, productUrl, productImage;
     Button save, cancel;
-    Product product= new Product();
+    Product product;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        product=new Product();
 
     }
 
@@ -56,9 +58,11 @@ public class AddProductFragment extends Fragment {
                 product.setProduct_name(name);
                 product.setProduct_url(url);
                 product.setProduct_image(image);
+                DaoImpl.getInstance().addNewProduct(product);
 
                 ProductFragment productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
                 productFragment.productNames.add(product);
+
                 productFragment.reload();
 
                 manager.popBackStack();

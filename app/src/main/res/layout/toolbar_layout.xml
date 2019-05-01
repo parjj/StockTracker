@@ -16,7 +16,8 @@
             android:id="@+id/toolbarButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start"
+            android:textAlignment="center"
+            android:hint="start"
             android:background="@android:color/transparent"
             />
 
@@ -27,17 +28,20 @@
             android:textSize="18dp"
             android:paddingLeft="30dp"
             android:textStyle="bold"
+            android:hint="main name"
             android:gravity="center_vertical"
             android:layout_margin="20dp"
+            android:textAlignment="center"
             android:layout_marginLeft="50dp" />
 
         <Button
             android:id="@+id/toolbarButtonEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:textAlignment="center"
             android:background="@android:color/transparent"
-            android:visibility="gone" />
+            android:visibility="gone"
+          />
 
     </android.support.v7.widget.Toolbar>
 

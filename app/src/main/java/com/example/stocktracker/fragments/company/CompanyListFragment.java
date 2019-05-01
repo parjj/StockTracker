@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 
 import com.example.stocktracker.R;
 import com.example.stocktracker.adapter.CompanyListAdapter;
@@ -29,12 +31,11 @@ public class CompanyListFragment extends Fragment {
     // extending list fragment only has or accepts listView nothing else can be defined.also no need of an xml to inflate .
     ListView listView;
     CompanyListAdapter companyListAdapter;
-    public static final String COMPANY_VALUE = "company value";
-    public static final String COMPANY_FRAGMENT = "company_fragment";
     List<Company> companyNames;
     Button toolbar_button;
 
-   // DaoInterface daoInterface= new DaoImpl();
+    public static final String COMPANY_VALUE = "company value";
+    public static final String COMPANY_FRAGMENT = "company_fragment";
 
     DaoImpl dao;
 
@@ -67,10 +68,11 @@ public class CompanyListFragment extends Fragment {
         toolbar_button.setText("Edit");
         toolbar_button.setTextColor(getResources().getColor(R.color.white));
 
-        toolbar_textview.setText(R.string.company_list);
+        toolbar_textview.setText(R.string.stock_tracker);
         toolbar_textview.setTextColor(getResources().getColor(R.color.white));
         toolbar.inflateMenu(R.menu.menu_add);
 
+        //add new companies  toolbar=menu add
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -95,7 +97,7 @@ public class CompanyListFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-
+        // on company click goes to the products page of that chosen comapny
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -115,17 +117,43 @@ public class CompanyListFragment extends Fragment {
         });
 
 
+        //Edit functionality of the whole company list
         toolbar_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //show all the list and on select give your edit options
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                EditCompanyFragment editCompanyFragment = new EditCompanyFragment();
-                fragmentTransaction.add(R.id.fragment_container, editCompanyFragment);
-                fragmentTransaction.addToBackStack("company_edit");
-                fragmentTransaction.commit();
+                toolbar_button.setText("Done");
+                listView.setBackgroundResource(R.color.lightPink);
+                companyListAdapter.visible = View.VISIBLE;
+                reload();
 
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        Bundle bundle = new Bundle();
+
+                        Company company = (Company) companyListAdapter.getItem(position);
+                        bundle.putSerializable("company_editable", company);
+
+                        //show all the list and on select give your edit options
+                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        EditCompanyFragment editCompanyFragment = new EditCompanyFragment();
+                        fragmentTransaction.add(R.id.fragment_container, editCompanyFragment);
+                        editCompanyFragment.setArguments(bundle);
+                        fragmentTransaction.addToBackStack("company_list_edit");
+                        fragmentTransaction.commit();
+                    }
+                });
+
+
+                toolbar_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        companyListAdapter.visible=View.GONE;
+                        reload();
+                    }
+                });
             }
         });
     }
@@ -145,3 +173,8 @@ public class CompanyListFragment extends Fragment {
     }
 
 }
+
+/*
+
+
+*/

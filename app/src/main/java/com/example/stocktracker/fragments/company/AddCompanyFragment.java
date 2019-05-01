@@ -19,9 +19,11 @@ public class AddCompanyFragment extends Fragment {
     Button saveC, cancelC;
     Company company = new Company();
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -58,8 +60,7 @@ public class AddCompanyFragment extends Fragment {
                 //is this really necessary , can we just have one line of addNewCompany and that reflect the changes in the listView without
                 //defining the companylistfrag in this class.
                 CompanyListFragment companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
-
-                companyListFragment.companyNames.add(company);
+                //companyListFragment.companyNames.add(company);
                 companyListFragment.reload();
                 manager.popBackStack();
             }

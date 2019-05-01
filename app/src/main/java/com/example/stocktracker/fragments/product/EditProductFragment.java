@@ -1,5 +1,6 @@
 package com.example.stocktracker.fragments.product;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.entity.Product;
 
 public class EditProductFragment extends Fragment {
@@ -29,7 +31,6 @@ public class EditProductFragment extends Fragment {
 
         edit_pName = view.findViewById(R.id.editPName);
         edit_pUrl = view.findViewById(R.id.editPUrl);
-        edit_pImage = view.findViewById(R.id.editPImage);
         edit_pImage = view.findViewById(R.id.editPImage);
         delete = view.findViewById(R.id.deleteB);
 
@@ -51,6 +52,7 @@ public class EditProductFragment extends Fragment {
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.reddishPink));
         toolbar_textview.setText("Edit Product");
+        toolbar_buttonEnd.setVisibility(View.VISIBLE);
         toolbar_buttonEnd.setText("Cancel");
         toolbar_button.setText("Save");
         toolbar_button.setTextColor(getResources().getColor(R.color.darkBrown));
@@ -64,16 +66,20 @@ public class EditProductFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        final ProductFragment productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+
+                DaoImpl.getInstance().deleteProduct(product);
+                productFragment.productNames.remove(product);
+                productFragment.reload();
+                getFragmentManager().popBackStackImmediate();
             }
         });
 
-
+        // cancel button
         toolbar_buttonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,11 +87,16 @@ public class EditProductFragment extends Fragment {
             }
         });
 
+
+        //save button
         toolbar_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
+                DaoImpl.getInstance().updateProduct(product);
+                productFragment.productNames.add(product);
+                productFragment.reload();
+                getFragmentManager().popBackStack();
 
             }
         });

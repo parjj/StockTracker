@@ -2,7 +2,8 @@
     <string name="app_name">Stock Tracker</string>
     <string name="watch_list">Watch List</string>
     <string name="company_list">Company List</string>
-    <string name="Product_list">Product List</string>
+    <string name="product_list">Product List</string>
+    <string name="stock_tracker">Stock Tracker</string>
 
 
 

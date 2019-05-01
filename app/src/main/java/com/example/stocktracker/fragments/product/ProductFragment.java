@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.stocktracker.R;
 import com.example.stocktracker.adapter.ProductListAdapter;
+import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 import com.squareup.picasso.Picasso;
@@ -55,9 +56,14 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.product_page_layout, container, false);
 
         productNames = new ArrayList<Product>();
+
+        // the company selected
         bundle = getArguments();
         Company company = (Company) bundle.getSerializable(COMPANY_VALUE);
 
+        if(company.getCompany_name()=="WWE"){
+            productNames=DaoImpl.getInstance().getProductsForCompany(company);
+        }
 
         //Toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -75,6 +81,7 @@ public class ProductFragment extends Fragment {
 
         toolbar.inflateMenu(R.menu.menu_add);
 
+        //add new products to the company
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -112,7 +119,7 @@ public class ProductFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
+        //product web view on selection of the product
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -132,6 +139,7 @@ public class ProductFragment extends Fragment {
             }
         });
 
+        //back button
         toolbar_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

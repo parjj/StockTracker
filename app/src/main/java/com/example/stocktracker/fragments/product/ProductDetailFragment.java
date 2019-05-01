@@ -79,7 +79,7 @@ public class ProductDetailFragment extends Fragment {
 
 
 
-
+        // back button
         toolbar_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +89,7 @@ public class ProductDetailFragment extends Fragment {
 
 
 
-
+        // on choosing edit button
         toolbar_buttonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +97,7 @@ public class ProductDetailFragment extends Fragment {
                 FragmentManager manager= getFragmentManager();
                 FragmentTransaction transaction= manager.beginTransaction();
                 EditProductFragment editProductFragment= new EditProductFragment();
-                transaction.add(R.id.fragment_container,editProductFragment,"editproduct_fragment_tag");
+                transaction.add(R.id.fragment_container,editProductFragment,"edit_product_fragment_tag");
                 transaction.addToBackStack("product_saved");
                 transaction.commit();
 
