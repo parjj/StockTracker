@@ -22,8 +22,14 @@ public class EditCompanyFragment extends Fragment {
     Button delete, toolbar_button, toolbar_buttonEnd;
     Company company;
     Bundle bundle;
-    DaoImpl dao;
 
+    CompanyListFragment companyListFragment;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+         companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,7 +37,9 @@ public class EditCompanyFragment extends Fragment {
         View view = inflater.inflate(R.layout.edit_company_layout, container, false);
 
         bundle=getArguments();
-        Company company = (Company) bundle.getSerializable("company_editable");
+        //company= (Company) bundle.getSerializable("company_editable");
+
+        company=DaoImpl.getInstance().getCompany(bundle.getInt("position"));
 
         edit_cName = view.findViewById(R.id.editCName);
         edit_cCode = view.findViewById(R.id.editCCode);
@@ -68,14 +76,16 @@ public class EditCompanyFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final CompanyListFragment companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
+
 
            //delete button
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    //delete
                     DaoImpl.getInstance().deleteCompany(company);
+                    companyListFragment.companyNames.remove(company);
                     companyListFragment.reload();
                     getFragmentManager().popBackStack();
                 }
@@ -94,7 +104,15 @@ public class EditCompanyFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
+                    String name=edit_cName.getText().toString();
+                    String code= edit_cCode.getText().toString();
+                    String url= edit_cImageUrl.getText().toString();
+
+                    company= new Company(name, code, url);
+
+                    //update
                     DaoImpl.getInstance().updateCompany(company);
+                    companyListFragment.companyNames.set(bundle.getInt("position"),company);
                     companyListFragment.reload();
                     getFragmentManager().popBackStack();
                 }

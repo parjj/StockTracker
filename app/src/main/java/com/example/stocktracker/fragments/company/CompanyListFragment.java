@@ -97,25 +97,7 @@ public class CompanyListFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        // on company click goes to the products page of that chosen comapny
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
-
-                Company company = (Company) companyListAdapter.getItem(position);
-                bundle.putSerializable(COMPANY_VALUE, company);
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                ProductFragment productFragment = new ProductFragment();
-                fragmentTransaction.add(R.id.fragment_container, productFragment, "prod_list");
-                productFragment.setArguments(bundle);
-                fragmentTransaction.addToBackStack(COMPANY_FRAGMENT);
-                fragmentTransaction.commit();
-            }
-        });
-
+        listViewListner();
 
         //Edit functionality of the whole company list
         toolbar_button.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +116,8 @@ public class CompanyListFragment extends Fragment {
                         Bundle bundle = new Bundle();
 
                         Company company = (Company) companyListAdapter.getItem(position);
-                        bundle.putSerializable("company_editable", company);
+                      //  bundle.putSerializable("company_editable", company);
+                        bundle.putInt("position",position);
 
                         //show all the list and on select give your edit options
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -146,12 +129,16 @@ public class CompanyListFragment extends Fragment {
                     }
                 });
 
-
+                // done button
                 toolbar_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        toolbar_button.setText("Edit");
+                        listView.setBackgroundResource(R.color.white);
                         companyListAdapter.visible=View.GONE;
+                        //getFragmentManager().popBackStack();
                         reload();
+                        listViewListner();
                     }
                 });
             }
@@ -160,6 +147,29 @@ public class CompanyListFragment extends Fragment {
 
     public void reload() {
         companyListAdapter.notifyDataSetChanged();
+    }
+
+    // on company click goes to the products page of that chosen comapny
+    public void listViewListner(){
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+
+                Company company = (Company) companyListAdapter.getItem(position);
+              //  bundle.putSerializable(COMPANY_VALUE, company);
+                bundle.putInt("selected_position",position);
+
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                ProductFragment productFragment = new ProductFragment();
+                fragmentTransaction.add(R.id.fragment_container, productFragment, "prod_list");
+                productFragment.setArguments(bundle);
+                fragmentTransaction.addToBackStack(COMPANY_FRAGMENT);
+                fragmentTransaction.commit();
+            }
+        });
     }
 
     @Override

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.entity.Product;
 
 public class WebViewProduct extends Fragment {
@@ -25,7 +26,7 @@ public class WebViewProduct extends Fragment {
     WebView product_web;
     Button toolbar_button, toolbar_buttonEnd;
 
-    Product product= new Product();
+    Product product;
 
     public static final String PRODUCT_VALUE = "product value";
 
@@ -34,24 +35,23 @@ public class WebViewProduct extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        View view= inflater.inflate(R.layout.web_view_layout, container, false);
+        View view = inflater.inflate(R.layout.web_view_layout, container, false);
 
-        product_web=view.findViewById(R.id.webView);
-        product_select=view.findViewById(R.id.webProdName);
+        product_web = view.findViewById(R.id.webView);
+        product_select = view.findViewById(R.id.webProdName);
 
         //get the product selected
         Bundle bundle = getArguments();
-        product = (Product) bundle.getSerializable(PRODUCT_VALUE);
+        // product = (Product) bundle.getSerializable(PRODUCT_VALUE);
+
+        product = DaoImpl.getInstance().getProduct(bundle.getInt("prod_position"));
 
         product_web.loadUrl(product.getProduct_url());
         product_web.getSettings().setJavaScriptEnabled(true);
         product_web.setWebChromeClient(new WebChromeClient());
         product_select.setText(product.getProduct_name());
 
-
-
         //Toolbar
-
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar_button = view.findViewById(R.id.toolbarButton);
         toolbar_buttonEnd = view.findViewById(R.id.toolbarButtonEnd);
@@ -62,12 +62,12 @@ public class WebViewProduct extends Fragment {
         toolbar_buttonEnd.setText("Edit");
         toolbar_buttonEnd.setVisibility(View.VISIBLE);
         toolbar_button.setText("Back");
+        // toolbar_button.setBackgroundResource(R.drawable.ic_arrow_back_black_24dp);
+
         toolbar_button.setTextColor(getResources().getColor(R.color.darkBrown));
 
         toolbar_textview.setText("Product Link");
         toolbar_textview.setTextSize(20);
-
-
 
         return view;
 
@@ -86,16 +86,15 @@ public class WebViewProduct extends Fragment {
         });
 
 
-
         // edit button
         toolbar_buttonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FragmentManager manager= getFragmentManager();
-                FragmentTransaction transaction= manager.beginTransaction();
-                EditProductFragment editProductFragment= new EditProductFragment();
-                transaction.add(R.id.fragment_container,editProductFragment,"edit_product_fragment_tag");
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                EditProductFragment editProductFragment = new EditProductFragment();
+                transaction.add(R.id.fragment_container, editProductFragment, "edit_product_fragment_tag");
                 transaction.addToBackStack("product_saved");
                 transaction.commit();
             }

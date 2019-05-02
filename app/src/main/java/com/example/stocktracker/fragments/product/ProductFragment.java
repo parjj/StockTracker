@@ -43,6 +43,8 @@ public class ProductFragment extends Fragment {
     public static final String PRODUCT_FRAGMENT = "product_fragment";
 
     ProductListAdapter productListAdapter;
+    Company company;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +61,12 @@ public class ProductFragment extends Fragment {
 
         // the company selected
         bundle = getArguments();
-        Company company = (Company) bundle.getSerializable(COMPANY_VALUE);
+        //company = (Company) bundle.getSerializable(COMPANY_VALUE);
 
-        if(company.getCompany_name()=="WWE"){
-            productNames=DaoImpl.getInstance().getProductsForCompany(company);
+        company = DaoImpl.getInstance().getCompany(bundle.getInt("selected_position"));
+
+        if (company.getCompany_name() == "WWE") {
+            productNames = DaoImpl.getInstance().getProductsForCompany(company);
         }
 
         //Toolbar
@@ -85,6 +89,7 @@ public class ProductFragment extends Fragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
+
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 AddProductFragment addProductFragment = new AddProductFragment();
@@ -96,7 +101,6 @@ public class ProductFragment extends Fragment {
                 return false;
             }
         });
-
 
 
         logo = view.findViewById(R.id.pImgView);
@@ -127,14 +131,18 @@ public class ProductFragment extends Fragment {
                 Bundle bundle = new Bundle();
 
                 Product product = (Product) productListAdapter.getItem(position);
-                bundle.putSerializable(PRODUCT_VALUE, product);
+                //   bundle.putSerializable(PRODUCT_VALUE, product);
+
+                bundle.putInt("prod_position", position);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 WebViewProduct webViewProduct = new WebViewProduct();
-                //fragmentTransaction.add(R.id.fragment_container, productDetailFragment,"prodselect_fragment");
-                fragmentTransaction.add(R.id.fragment_container, webViewProduct,"webview_fragment");
+
+                fragmentTransaction.add(R.id.fragment_container, webViewProduct, "webview_fragment");
                 webViewProduct.setArguments(bundle);
+
                 fragmentTransaction.addToBackStack(PRODUCT_FRAGMENT);
+
                 fragmentTransaction.commit();
             }
         });

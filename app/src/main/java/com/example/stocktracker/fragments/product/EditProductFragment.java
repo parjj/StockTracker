@@ -2,11 +2,13 @@ package com.example.stocktracker.fragments.product;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,6 +26,17 @@ public class EditProductFragment extends Fragment {
 
     public static final String PRODUCT_VALUE = "product value";
 
+    WebViewProduct webViewProduct;
+    ProductFragment productFragment;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        webViewProduct = (WebViewProduct) getFragmentManager().findFragmentByTag("webview_fragment");
+        productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -34,10 +47,10 @@ public class EditProductFragment extends Fragment {
         edit_pImage = view.findViewById(R.id.editPImage);
         delete = view.findViewById(R.id.deleteB);
 
+//        product= (Product)webViewProduct.getArguments().getSerializable(PRODUCT_VALUE);
 
-        WebViewProduct fragment = (WebViewProduct) getFragmentManager().findFragmentByTag("webview_fragment");
-        product= (Product)fragment.getArguments().getSerializable(PRODUCT_VALUE);
-
+        product = DaoImpl.getInstance().getProduct(webViewProduct.getArguments().
+                getInt("prod_position"));
 
         edit_pName.setText(product.getProduct_name());
         edit_pUrl.setText(product.getProduct_url());
@@ -66,16 +79,19 @@ public class EditProductFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final ProductFragment productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
 
+        //delete button
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //delete product
                 DaoImpl.getInstance().deleteProduct(product);
                 productFragment.productNames.remove(product);
                 productFragment.reload();
-                getFragmentManager().popBackStackImmediate();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, productFragment).commit();
+
             }
         });
 
@@ -88,15 +104,27 @@ public class EditProductFragment extends Fragment {
         });
 
 
-        //save button
+        //save button updates the product with new changes
         toolbar_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                String name = edit_pName.getText().toString();
+                String url = edit_pUrl.getText().toString();
+                String image = edit_pImage.getText().toString();
+
+                product = new Product(name, url, image);
+
                 DaoImpl.getInstance().updateProduct(product);
-                productFragment.productNames.add(product);
+
+                webViewProduct.product_web.loadUrl(product.getProduct_url());
+                webViewProduct.product_select.setText(product.getProduct_name());
+
+                productFragment.productNames.set(webViewProduct.getArguments().
+                        getInt("prod_position"), product);
                 productFragment.reload();
-                getFragmentManager().popBackStack();
+                getFragmentManager().popBackStackImmediate();
+
 
             }
         });

@@ -47,7 +47,7 @@ public class CompanyListAdapter extends ArrayAdapter {
         TextView text_rate = convertView.findViewById(R.id.rate);
 
         delImageView.setVisibility(visible);
-        delImageView.setMaxWidth(10);
+        Picasso.get().load(R.drawable.icons8_minus_48).resize(70,70).into(delImageView);
 
         if (company != null) {
             company.setRate(299.00);

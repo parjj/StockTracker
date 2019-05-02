@@ -48,9 +48,11 @@ public class AddProductFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final FragmentManager manager = getFragmentManager();
 
+        //save button adds a new product
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String url = productUrl.getText().toString();
                 String name = productName.getText().toString();
                 String image = productImage.getText().toString();
@@ -58,10 +60,12 @@ public class AddProductFragment extends Fragment {
                 product.setProduct_name(name);
                 product.setProduct_url(url);
                 product.setProduct_image(image);
+
+                // add product
                 DaoImpl.getInstance().addNewProduct(product);
 
                 ProductFragment productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
-                productFragment.productNames.add(product);
+              //  productFragment.productNames.add(product);
 
                 productFragment.reload();
 
@@ -69,6 +73,7 @@ public class AddProductFragment extends Fragment {
             }
         });
 
+        //cancel button
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

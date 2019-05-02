@@ -17,15 +17,7 @@ public class AddCompanyFragment extends Fragment {
 
     EditText cName, cCode, cImageUrl;
     Button saveC, cancelC;
-    Company company = new Company();
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
+    Company company ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,9 +43,12 @@ public class AddCompanyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                company = new Company();
+
                 company.setCompany_name(cName.getText().toString());
                 company.setCompany_stockName(cCode.getText().toString());
                 company.setUrl(cImageUrl.getText().toString());
+
                 DaoImpl.getInstance().addNewCompany(company);
 
                 //i am adding a dao and again i am calling the companylistfrag for adding it to the companyNames
