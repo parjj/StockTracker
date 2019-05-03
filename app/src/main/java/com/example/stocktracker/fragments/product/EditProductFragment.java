@@ -4,6 +4,7 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.fragments.company.CompanyListFragment;
 import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.entity.Product;
 
@@ -89,8 +91,9 @@ public class EditProductFragment extends Fragment {
                 DaoImpl.getInstance().deleteProduct(product);
                 productFragment.productNames.remove(product);
                 productFragment.reload();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, productFragment).commit();
+
+                getFragmentManager().popBackStack(ProductFragment.PRODUCT_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
 
             }
         });

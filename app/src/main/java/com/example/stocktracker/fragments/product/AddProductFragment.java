@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.example.stocktracker.R;
 import com.example.stocktracker.adapter.ProductListAdapter;
 import com.example.stocktracker.model.DaoImpl;
+import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 
 public class AddProductFragment extends Fragment {
@@ -65,8 +66,11 @@ public class AddProductFragment extends Fragment {
                 DaoImpl.getInstance().addNewProduct(product);
 
                 ProductFragment productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
-              //  productFragment.productNames.add(product);
 
+              if(productFragment.productNames.size()==0) {
+                  productFragment.productNames.add(product);
+                  productFragment.company.setProduct(productFragment.productNames);
+              }
                 productFragment.reload();
 
                 manager.popBackStack();

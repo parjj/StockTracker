@@ -157,7 +157,7 @@ public class CompanyListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
 
-                Company company = (Company) companyListAdapter.getItem(position);
+               // Company company = (Company) companyListAdapter.getItem(position);
               //  bundle.putSerializable(COMPANY_VALUE, company);
                 bundle.putInt("selected_position",position);
 

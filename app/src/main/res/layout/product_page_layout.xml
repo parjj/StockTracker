@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightPink"
+    android:clickable="true"
     android:orientation="vertical">
 
+    <!-- this clickable doesnt allow you to switch the screens -->
     <include
         layout="@layout/toolbar_layout"
         android:id="@+id/toolbarP"

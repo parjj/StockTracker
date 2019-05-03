@@ -15,12 +15,17 @@ import android.widget.TextView;
 import com.example.stocktracker.R;
 import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.entity.Company;
+import com.example.stocktracker.model.entity.Product;
+
+import java.util.List;
 
 public class EditCompanyFragment extends Fragment {
 
     EditText edit_cName, edit_cCode, edit_cImageUrl;
     Button delete, toolbar_button, toolbar_buttonEnd;
     Company company;
+    List<Product> products;
+
     Bundle bundle;
 
     CompanyListFragment companyListFragment;
@@ -40,6 +45,8 @@ public class EditCompanyFragment extends Fragment {
         //company= (Company) bundle.getSerializable("company_editable");
 
         company=DaoImpl.getInstance().getCompany(bundle.getInt("position"));
+
+        products=DaoImpl.getInstance().getProductsForCompany(company);
 
         edit_cName = view.findViewById(R.id.editCName);
         edit_cCode = view.findViewById(R.id.editCCode);
@@ -108,8 +115,11 @@ public class EditCompanyFragment extends Fragment {
                     String code= edit_cCode.getText().toString();
                     String url= edit_cImageUrl.getText().toString();
 
-                    company= new Company(name, code, url);
-
+                    if(products !=null) {
+                        company = new Company(name, code, url, products);
+                    }else{
+                        company = new Company(name, code, url);
+                    }
                     //update
                     DaoImpl.getInstance().updateCompany(company);
                     companyListFragment.companyNames.set(bundle.getInt("position"),company);

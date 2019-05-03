@@ -26,7 +26,7 @@ public interface DaoInterface {
 
     //Product
 
-    List<Product> getAllProducts();
+    //List<Product> getAllProducts();
 
     Product getProduct(int position);
 

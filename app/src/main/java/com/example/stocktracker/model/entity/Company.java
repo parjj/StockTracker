@@ -38,6 +38,15 @@ public class Company implements Serializable {
         this.product = product;
     }
 
+    public Company(String company_name, String company_stockName, String url,  List<Product> product) {
+        this.company_name = company_name;
+        this.rate = rate;
+        this.url = url;
+        this.company_stockName = company_stockName;
+        this.product = product;
+    }
+
+
     public Company() {
     }
 
