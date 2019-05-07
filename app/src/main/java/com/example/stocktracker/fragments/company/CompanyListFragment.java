@@ -1,5 +1,6 @@
 package com.example.stocktracker.fragments.company;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,15 @@ import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.DaoInterface;
 import com.example.stocktracker.model.entity.Company;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +52,7 @@ public class CompanyListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        companyNames = new ArrayList<Company>();
+
     }
 
     @Override
@@ -52,8 +62,12 @@ public class CompanyListFragment extends Fragment {
 
         //listview definitions
         listView = view.findViewById(android.R.id.list);
-        dao=dao.getInstance();
-        companyNames= dao.getAllCompanies();
+        dao = dao.getInstance();
+        companyNames = dao.getAllCompanies();
+        if(companyNames ==null){
+            companyNames = new ArrayList<Company>();
+        }
+
         companyListAdapter = new CompanyListAdapter(getContext(), companyNames);
         listView.setAdapter(companyListAdapter);
         listView.setEmptyView(view.findViewById(R.id.company_emptyLayout));
@@ -80,13 +94,12 @@ public class CompanyListFragment extends Fragment {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 AddCompanyFragment addCompanyFragment = new AddCompanyFragment();
-                fragmentTransaction.add(R.id.fragment_container, addCompanyFragment,"addcompany_fragment_tag");
+                fragmentTransaction.add(R.id.fragment_container, addCompanyFragment, "addcompany_fragment_tag");
                 fragmentTransaction.addToBackStack("company_fragmentlist");
                 fragmentTransaction.commit();
                 return false;
             }
         });
-
 
 
         return view;
@@ -116,8 +129,8 @@ public class CompanyListFragment extends Fragment {
                         Bundle bundle = new Bundle();
 
                         Company company = (Company) companyListAdapter.getItem(position);
-                      //  bundle.putSerializable("company_editable", company);
-                        bundle.putInt("position",position);
+                        //  bundle.putSerializable("company_editable", company);
+                        bundle.putInt("position", position);
 
                         //show all the list and on select give your edit options
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -135,7 +148,7 @@ public class CompanyListFragment extends Fragment {
                     public void onClick(View v) {
                         toolbar_button.setText("Edit");
                         listView.setBackgroundResource(R.color.white);
-                        companyListAdapter.visible=View.GONE;
+                        companyListAdapter.visible = View.GONE;
                         //getFragmentManager().popBackStack();
                         reload();
                         listViewListner();
@@ -150,16 +163,16 @@ public class CompanyListFragment extends Fragment {
     }
 
     // on company click goes to the products page of that chosen comapny
-    public void listViewListner(){
+    public void listViewListner() {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
 
-               // Company company = (Company) companyListAdapter.getItem(position);
-              //  bundle.putSerializable(COMPANY_VALUE, company);
-                bundle.putInt("selected_position",position);
+                // Company company = (Company) companyListAdapter.getItem(position);
+                //  bundle.putSerializable(COMPANY_VALUE, company);
+                bundle.putInt("selected_position", position);
 
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -182,9 +195,6 @@ public class CompanyListFragment extends Fragment {
         super.onPause();
     }
 
+
+
 }
-
-/*
-
-
-*/

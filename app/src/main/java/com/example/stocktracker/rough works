@@ -1,6 +1,91 @@
 companylistfragment----> productfragment---->addproductfragment
 
 check the working of floating button too
+------------------------------------------
+
+/*   1 method of doing
+
+  httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+          int responseCode = httpURLConnection.getResponseCode();
+
+          if (responseCode == HttpURLConnection.HTTP_OK) {
+
+                  httpURLConnection.setRequestMethod("GET");
+                  InputStream inputStream = httpURLConnection.getInputStream();
+
+                  sendAndRequestResponse(url.toString());
+
+
+                  InputStreamReader streamReader =
+                  new InputStreamReader(inputStream, "UTF-8");
+
+                  BufferedReader bstreamReader = new BufferedReader(streamReader);
+                  StringBuilder responseStrBuilder = new StringBuilder();
+
+                  String inputStr;
+                  while ((inputStr = bstreamReader.readLine()) != null)
+                  responseStrBuilder.append(inputStr);
+
+                  JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
+
+                  rate_value = jsonObject.getJSONObject("Global Quote").getDouble("05. price");
+                  company.setRate(rate_value);*/
+
+
+
+   /* //String Request initialized
+    StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_string, new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+
+            Toast.makeText(context,"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+
+            Log.i(TAG,"Error :" + error.toString());
+        }
+    });
+*/
+
+
+   /*    using volley
+            //RequestQueue initialized
+            RequestQueue mRequestQueue = Volley.newRequestQueue(context);
+
+            //String Request initialized
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url.toString(), null, new Response.Listener<JSONObject>() {
+
+
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.toString());
+                        rate_value = jsonObject.getJSONObject("Global Quote").getDouble("05. price");
+
+                        company.setRate(rate_value);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i(TAG, "Error :" + error.toString());
+                }
+
+
+            });
+            mRequestQueue.add(jsonObjectRequest);
+*/
 
 -----------------------------
 
@@ -9,6 +94,8 @@ stock api
 https://stackoverflow.com/questions/10040954/alternative-to-google-finance-api
 
 http://square.github.io/retrofit/
+
+https://pusher.com/tutorials/stocks-push-notifications-kotlin
 
 Try Alpha Vantage API
 
@@ -30,6 +117,31 @@ To get all stock quotes in JSON, just add format=JSON to the end of the URL:
 http://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json
 
 https://github.com/oanda/java-api-streaming
+
+using alphavantage
+
+Quote Endpoint High Usage
+
+A lightweight alternative to the time series APIs, this service returns the latest price and volume information for a security of your choice.
+
+Welcome to Alpha Vantage! Here is your API key: 06TZZOMBWPSZNJKE. Please record this API key for future access to Alpha Vantage.
+API Parameters
+❚ Required: function
+
+The API function of your choice.
+
+❚ Required: symbol
+
+The symbol of the global security of your choice. For example: symbol=MSFT.
+
+❚ Optional: datatype
+
+By default, datatype=json. Strings json and csv are accepted with the following specifications: json returns the quote data in JSON format; csv returns the quote data as a CSV (comma separated value) file.
+
+❚ Required: apikey
+
+Your API key. Claim your free API key here.
+
 
 
 -----------------------------------------
