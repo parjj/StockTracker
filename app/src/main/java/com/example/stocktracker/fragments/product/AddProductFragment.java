@@ -1,5 +1,6 @@
 package com.example.stocktracker.fragments.product;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,9 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.adapter.ProductListAdapter;
-import com.example.stocktracker.model.DaoImpl;
-import com.example.stocktracker.model.entity.Company;
+import com.example.stocktracker.model.Database.LocalDatabase;
 import com.example.stocktracker.model.entity.Product;
 
 public class AddProductFragment extends Fragment {
@@ -21,10 +20,17 @@ public class AddProductFragment extends Fragment {
     Button save, cancel;
     Product product;
 
+    LocalDatabase localDatabase;
+
+    ProductFragment productFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        product=new Product();
+
+        localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
+        product = new Product();
+        productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
 
     }
 
@@ -43,11 +49,11 @@ public class AddProductFragment extends Fragment {
 
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final FragmentManager manager = getFragmentManager();
+
 
         //save button adds a new product
         save.setOnClickListener(new View.OnClickListener() {
@@ -61,17 +67,10 @@ public class AddProductFragment extends Fragment {
                 product.setProduct_name(name);
                 product.setProduct_url(url);
                 product.setProduct_image(image);
+                product.setCompanyId(productFragment.companyID);
 
                 // add product
-                DaoImpl.getInstance().addNewProduct(product);
-
-                ProductFragment productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
-
-              if(productFragment.productNames.size()==0) {
-                  productFragment.productNames.add(product);
-                  productFragment.company.setProduct(productFragment.productNames);
-              }
-                productFragment.reload();
+                new InsertProduct(product).execute();
 
                 manager.popBackStack();
             }
@@ -87,5 +86,21 @@ public class AddProductFragment extends Fragment {
         });
     }
 
+
+    //Async Insert task class
+    public class InsertProduct extends AsyncTask<Void, Void, Void> {
+
+        Product in_product;
+
+        public InsertProduct(Product product) {
+            this.in_product = product;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            localDatabase.daoAccess().addNewProduct(in_product);
+            return null;
+        }
+    }
 }
 

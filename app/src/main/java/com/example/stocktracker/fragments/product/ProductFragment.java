@@ -1,5 +1,7 @@
 package com.example.stocktracker.fragments.product;
 
+import android.arch.lifecycle.Observer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,13 +19,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.adapter.CompanyListAdapter;
 import com.example.stocktracker.adapter.ProductListAdapter;
+import com.example.stocktracker.fragments.company.CompanyListFragment;
 import com.example.stocktracker.model.DaoImpl;
+import com.example.stocktracker.model.Database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ProductFragment extends Fragment {
@@ -33,7 +39,8 @@ public class ProductFragment extends Fragment {
     ImageView logo;
     TextView textView;
     ListView listView;
-    List<Product> productNames;
+    List<Product> productNames, products_test;
+    Long companyID;
 
     Bundle bundle;
     Button toolbar_button;
@@ -43,7 +50,23 @@ public class ProductFragment extends Fragment {
     public static final String PRODUCT_FRAGMENT = "product_fragment";
 
     ProductListAdapter productListAdapter;
+    CompanyListFragment companyListFragment;
     Company company;
+    Product product;
+
+    LocalDatabase localDatabase;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+
+        localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
+        companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +76,22 @@ public class ProductFragment extends Fragment {
         // the company selected
         bundle = getArguments();
 
-        company = DaoImpl.getInstance().getCompany(bundle.getInt("selected_position"));
+        // int pos = bundle.getInt("selected_position");
+        company = companyListFragment.company_main;
+        companyID = company.getId();
+
+        if (productNames == null) {
+            productNames = new ArrayList<>();
+        }
+
+        //listview checks
+        listView = view.findViewById(R.id.plist);
+        listView.setEmptyView(view.findViewById(R.id.product_emptyLayout));
+
+        productListAdapter = new ProductListAdapter(getContext(), productNames);
+        listView.setAdapter(productListAdapter);
+
+        productLivedataCheck();     // Room database live data check
 
         //Toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -69,7 +107,7 @@ public class ProductFragment extends Fragment {
         toolbar_textview.setTextSize(20);
         toolbar_textview.setTextColor(getResources().getColor(R.color.darkBrown));
 
-        toolbar.inflateMenu(R.menu.menu_add);
+        toolbar.inflateMenu(R.menu.menu_padd);
 
         //add new products to the company
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -88,21 +126,8 @@ public class ProductFragment extends Fragment {
             }
         });
 
-
         logo = view.findViewById(R.id.pImgView);
         textView = view.findViewById(R.id.pCompanyName);
-
-        //listview checks
-        listView = view.findViewById(R.id.plist);
-        productNames = DaoImpl.getInstance().getProductsForCompany(company);
-
-        if(productNames==null) {
-            productNames = new ArrayList<Product>();
-        }
-        productListAdapter = new ProductListAdapter(getContext(), productNames);
-
-        listView.setAdapter(productListAdapter);
-        listView.setEmptyView(view.findViewById(R.id.product_emptyLayout));
 
         textView.setText(company.getCompany_name() + "(" + company.getCompany_stockName() + ")");
         Picasso.get().load(company.getUrl()).resize(512, 512).into(logo);
@@ -120,10 +145,9 @@ public class ProductFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-           //     Product product = (Product) productListAdapter.getItem(position);
-
                 Bundle bundle = new Bundle();
                 bundle.putInt("prod_position", position);
+                product= (Product) listView.getItemAtPosition(position);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 WebViewProduct webViewProduct = new WebViewProduct();
@@ -142,6 +166,20 @@ public class ProductFragment extends Fragment {
             }
         });
 
+    }
+
+    public void productLivedataCheck() {
+
+        //database
+        localDatabase.daoAccess().getProductsForCompany(companyID).observe(ProductFragment.this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(@Nullable List<Product> products) {                                // companies value is returned from database
+                productNames.clear();
+                productNames.addAll(products);
+
+                reload();
+            }
+        });
     }
 
     //adapter notify

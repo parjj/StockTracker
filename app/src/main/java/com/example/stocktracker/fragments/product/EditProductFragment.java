@@ -1,6 +1,6 @@
 package com.example.stocktracker.fragments.product;
 
-import android.Manifest;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,14 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.fragments.company.CompanyListFragment;
 import com.example.stocktracker.model.DaoImpl;
+import com.example.stocktracker.model.Database.LocalDatabase;
 import com.example.stocktracker.model.entity.Product;
 
 public class EditProductFragment extends Fragment {
@@ -30,13 +29,17 @@ public class EditProductFragment extends Fragment {
 
     WebViewProduct webViewProduct;
     ProductFragment productFragment;
+    LocalDatabase localDatabase;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         webViewProduct = (WebViewProduct) getFragmentManager().findFragmentByTag("webview_fragment");
         productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
+
+        localDatabase= LocalDatabase.getDb(getContext().getApplicationContext());
     }
 
     @Override
@@ -49,15 +52,10 @@ public class EditProductFragment extends Fragment {
         edit_pImage = view.findViewById(R.id.editPImage);
         delete = view.findViewById(R.id.deleteB);
 
-//        product= (Product)webViewProduct.getArguments().getSerializable(PRODUCT_VALUE);
-
-        product = DaoImpl.getInstance().getProduct(webViewProduct.getArguments().
-                getInt("prod_position"));
-
+        product= productFragment.product;
         edit_pName.setText(product.getProduct_name());
         edit_pUrl.setText(product.getProduct_url());
         edit_pImage.setText(product.getProduct_image());
-
 
         //Toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -87,14 +85,9 @@ public class EditProductFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //delete product
-                DaoImpl.getInstance().deleteProduct(product);
-                productFragment.productNames.remove(product);
-                productFragment.reload();
+                new DeleteProduct(product).execute();
 
                 getFragmentManager().popBackStack(ProductFragment.PRODUCT_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-
             }
         });
 
@@ -118,18 +111,49 @@ public class EditProductFragment extends Fragment {
 
                 product = new Product(name, url, image);
 
-                DaoImpl.getInstance().updateProduct(product);
+                new UpdateProduct(product).execute();
 
                 webViewProduct.product_web.loadUrl(product.getProduct_url());
                 webViewProduct.product_select.setText(product.getProduct_name());
 
-                productFragment.productNames.set(webViewProduct.getArguments().
-                        getInt("prod_position"), product);
-                productFragment.reload();
                 getFragmentManager().popBackStackImmediate();
-
 
             }
         });
+    }
+
+
+    //Async Delete task class
+    public class DeleteProduct extends AsyncTask<Void, Void, Void> {
+
+        Product del_product;
+
+        public DeleteProduct(Product del_product) {
+            this.del_product = del_product;
+        }
+
+        @Override
+        protected Void doInBackground(Void... people) {
+            localDatabase.daoAccess().deleteProduct(del_product);
+            return null;
+        }
+
+    }
+
+
+    //Async Update task class
+    public class UpdateProduct extends AsyncTask<Void, Void, Product> {
+
+        private  Product up_product;
+
+        public UpdateProduct(Product up_product) {
+            this.up_product = up_product;
+        }
+
+        @Override
+        protected Product doInBackground(Void... people) {
+            localDatabase.daoAccess().updateProduct(up_product);
+            return up_product;
+        }
     }
 }

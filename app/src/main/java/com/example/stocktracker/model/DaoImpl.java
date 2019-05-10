@@ -1,5 +1,7 @@
 package com.example.stocktracker.model;
 
+import android.arch.persistence.room.Query;
+
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 
@@ -47,7 +49,7 @@ public class DaoImpl implements DaoInterface {
 
         companyList.add(new Company("Apple", "AAPL", "https://cdn4.iconfinder.com/data/icons/socialcones/508/Apple-512.png", productList));
 
-      /*  //google company
+        //google company
         productList = new ArrayList<>();
         productList.add(new Product("Google Home", "https://www.bestbuy.com/site/google-home-smart-speaker-with-google-assistant-white-slate/5578849.p?skuId=5578849", "https://icdn4.digitaltrends.com/image/google-home-security-thumb-2-1500x1000.jpg"));
 
@@ -63,10 +65,11 @@ public class DaoImpl implements DaoInterface {
 
         companyList.add(new Company("Tesla", "TSLA", "https://userscontent2.emaze.com/images/dc1bd939-2c82-4b65-9a4a-d30754860c2c/e90b0328-8342-4ab9-9661-3f83690e1d51image01.png",productList));
 
-    }*/
     }
+
     //Company
 
+    @Query("SELECT * FROM Company")
     @Override
     public List<Company> getAllCompanies() {
         return companyList;

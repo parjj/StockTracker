@@ -1,6 +1,8 @@
 package com.example.stocktracker.fragments.company;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -10,14 +12,24 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.DaoImpl;
+import com.example.stocktracker.model.Database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 
 public class AddCompanyFragment extends Fragment {
 
     EditText cName, cCode, cImageUrl;
     Button saveC, cancelC;
-    Company company ;
+    Company company;
+
+    LocalDatabase localDatabase;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,14 +61,16 @@ public class AddCompanyFragment extends Fragment {
                 company.setCompany_stockName(cCode.getText().toString());
                 company.setUrl(cImageUrl.getText().toString());
 
-                DaoImpl.getInstance().addNewCompany(company);
+              //  DaoImpl.getInstance().addNewCompany(company);
+
+                new InsertTask(company).execute();
 
                 //i am adding a dao and again i am calling the companylistfrag for adding it to the companyNames
                 //is this really necessary , can we just have one line of addNewCompany and that reflect the changes in the listView without
                 //defining the companylistfrag in this class.
-                CompanyListFragment companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
+                //CompanyListFragment companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
                 //companyListFragment.companyNames.add(company);
-                companyListFragment.reload();
+
                 manager.popBackStack();
             }
 
@@ -70,6 +84,24 @@ public class AddCompanyFragment extends Fragment {
             }
         });
     }
+
+
+    //Async Insert task class
+    public class InsertTask extends AsyncTask<Void, Void, Void> {
+
+        private final Company in_company;
+
+        public InsertTask(Company company) {
+            this.in_company = company;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            localDatabase.daoAccess().addNewCompany(in_company);
+            return null;
+        }
+    }
+
 
 
 }

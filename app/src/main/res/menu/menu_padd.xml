@@ -4,8 +4,7 @@
 
     <item
         android:id="@+id/addMenuP"
+        android:icon="@drawable/ic_add_black_24dp"
         android:title="Product Add"
-        android:icon="@drawable/btn_back"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
 </menu>

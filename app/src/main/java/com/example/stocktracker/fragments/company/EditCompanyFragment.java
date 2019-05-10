@@ -1,5 +1,6 @@
 package com.example.stocktracker.fragments.company;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.stocktracker.R;
 import com.example.stocktracker.model.DaoImpl;
+import com.example.stocktracker.model.Database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 
@@ -25,15 +27,20 @@ public class EditCompanyFragment extends Fragment {
     Button delete, toolbar_button, toolbar_buttonEnd;
     Company company;
     List<Product> products;
+    Long company_id;
 
     Bundle bundle;
+    LocalDatabase localDatabase;
 
     CompanyListFragment companyListFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
+
+        localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
+
+        companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
     }
 
     @Override
@@ -41,24 +48,21 @@ public class EditCompanyFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.edit_company_layout, container, false);
 
-        bundle=getArguments();
-        //company= (Company) bundle.getSerializable("company_editable");
+        bundle = getArguments();
+        int pos = bundle.getInt("position");
+        company = companyListFragment.companyNames.get(pos);
+        company_id=company.getId();
 
-        company=DaoImpl.getInstance().getCompany(bundle.getInt("position"));
-
-        products=DaoImpl.getInstance().getProductsForCompany(company);
+        products= company.getProduct();
 
         edit_cName = view.findViewById(R.id.editCName);
         edit_cCode = view.findViewById(R.id.editCCode);
         edit_cImageUrl = view.findViewById(R.id.editCImage);
         delete = view.findViewById(R.id.editCdelete);
 
-
         edit_cName.setText(company.getCompany_name());
         edit_cCode.setText(company.getCompany_stockName());
         edit_cImageUrl.setText(company.getUrl());
-
-
 
         //Toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -75,7 +79,6 @@ public class EditCompanyFragment extends Fragment {
         toolbar_textview.setTextSize(20);
         toolbar_textview.setTextColor(getResources().getColor(R.color.darkBrown));
 
-
         return view;
     }
 
@@ -84,50 +87,97 @@ public class EditCompanyFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //delete button
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-           //delete button
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                //delete
+                // DaoImpl.getInstance().deleteCompany(company);
+                // companyListFragment.localDatabase.daoAccess().deleteCompany(company);
+                // Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
+                // on using this , instead define the new DeleteTask()
 
-                    //delete
-                    DaoImpl.getInstance().deleteCompany(company);
-                    companyListFragment.companyNames.remove(company);
-                    companyListFragment.reload();
-                    getFragmentManager().popBackStack();
+                new DeleteCompany(company).execute();
+                getFragmentManager().popBackStack();
+            }
+        });
+
+        //cancel button
+        toolbar_buttonEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
+
+        //save button
+        toolbar_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String name = edit_cName.getText().toString();
+                String code = edit_cCode.getText().toString();
+                String url = edit_cImageUrl.getText().toString();
+
+                company.setId(company_id);
+                company.setCompany_name(name);
+                company.setCompany_stockName(code);
+                company.setUrl(url);
+
+                if (products != null) {
+                    company = new Company(name, code, url, products);
+                } else {
+                    company = new Company(name, code, url);
                 }
-            });
 
-            //cancel button
-            toolbar_buttonEnd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getFragmentManager().popBackStack();
-                }
-            });
+                //update
+                new UpdateCompany(company).execute();
 
-            //save button
-            toolbar_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
+    }
 
-                    String name=edit_cName.getText().toString();
-                    String code= edit_cCode.getText().toString();
-                    String url= edit_cImageUrl.getText().toString();
 
-                    if(products !=null) {
-                        company = new Company(name, code, url, products);
-                    }else{
-                        company = new Company(name, code, url);
-                    }
-                    //update
-                    DaoImpl.getInstance().updateCompany(company);
-                    companyListFragment.companyNames.set(bundle.getInt("position"),company);
-                    companyListFragment.reload();
-                    getFragmentManager().popBackStack();
-                }
-            });
+    //Async Delete task class
+    public class DeleteCompany extends AsyncTask<Company, Void, Void> {
+
+        private final Company del_company;
+
+
+        public DeleteCompany(Company del_company) {
+            this.del_company = del_company;
+        }
+
+        @Override
+        protected Void doInBackground(Company... companies) {
+            Long id= del_company.getId();
+            localDatabase.daoAccess().deleteCompany(del_company);
+            localDatabase.daoAccess().deleteProductforCompany(id);
+            return null;
+        }
+
+    }
+
+
+    //Async Update task class
+    public class UpdateCompany extends AsyncTask<Void, Void, Company> {
+
+        private final Company up_company;
+
+        public UpdateCompany(Company company) {
+            this.up_company = company;
+        }
+
+        @Override
+        protected Company doInBackground(Void... people) {
+            localDatabase.daoAccess().updateCompany(up_company);
+            return up_company;
         }
     }
+
+
+}
 
 

@@ -27,6 +27,7 @@ public class WebViewProduct extends Fragment {
     Button toolbar_button, toolbar_buttonEnd;
 
     Product product;
+    ProductFragment productFragment;
 
     public static final String PRODUCT_VALUE = "product value";
 
@@ -37,6 +38,8 @@ public class WebViewProduct extends Fragment {
 
         View view = inflater.inflate(R.layout.web_view_layout, container, false);
 
+        productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
+
         product_web = view.findViewById(R.id.webView);
         product_select = view.findViewById(R.id.webProdName);
 
@@ -44,8 +47,9 @@ public class WebViewProduct extends Fragment {
         Bundle bundle = getArguments();
         // product = (Product) bundle.getSerializable(PRODUCT_VALUE);
 
-        product = DaoImpl.getInstance().getProduct(bundle.getInt("prod_position"));
+     //   product = pro("prod_position"));
 
+        this.product=productFragment.product;
         product_web.loadUrl(product.getProduct_url());
         product_web.getSettings().setJavaScriptEnabled(true);
         product_web.setWebChromeClient(new WebChromeClient());
