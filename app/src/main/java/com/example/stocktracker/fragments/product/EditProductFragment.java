@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
+import com.example.stocktracker.fragments.company.CompanyListFragment;
 import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.Database.LocalDatabase;
 import com.example.stocktracker.model.entity.Product;
@@ -29,6 +30,7 @@ public class EditProductFragment extends Fragment {
 
     WebViewProduct webViewProduct;
     ProductFragment productFragment;
+    CompanyListFragment companyListFragment;
     LocalDatabase localDatabase;
 
 
@@ -38,7 +40,6 @@ public class EditProductFragment extends Fragment {
 
         webViewProduct = (WebViewProduct) getFragmentManager().findFragmentByTag("webview_fragment");
         productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
-
         localDatabase= LocalDatabase.getDb(getContext().getApplicationContext());
     }
 
@@ -86,7 +87,6 @@ public class EditProductFragment extends Fragment {
             public void onClick(View v) {
 
                 new DeleteProduct(product).execute();
-
                 getFragmentManager().popBackStack(ProductFragment.PRODUCT_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
@@ -109,7 +109,9 @@ public class EditProductFragment extends Fragment {
                 String url = edit_pUrl.getText().toString();
                 String image = edit_pImage.getText().toString();
 
-                product = new Product(name, url, image);
+                product.setProduct_name(name);
+                product.setProduct_url(url);
+                product.setProduct_image(image);
 
                 new UpdateProduct(product).execute();
 
@@ -117,11 +119,9 @@ public class EditProductFragment extends Fragment {
                 webViewProduct.product_select.setText(product.getProduct_name());
 
                 getFragmentManager().popBackStackImmediate();
-
             }
         });
     }
-
 
     //Async Delete task class
     public class DeleteProduct extends AsyncTask<Void, Void, Void> {
@@ -137,7 +137,6 @@ public class EditProductFragment extends Fragment {
             localDatabase.daoAccess().deleteProduct(del_product);
             return null;
         }
-
     }
 
 

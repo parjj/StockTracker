@@ -39,7 +39,6 @@ public class EditCompanyFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
-
         companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
     }
 
@@ -125,10 +124,12 @@ public class EditCompanyFragment extends Fragment {
                 company.setCompany_stockName(code);
                 company.setUrl(url);
 
+                company.setCompany_name(name);
+                company.setCompany_stockName(code);
+                company.setUrl(url);
+
                 if (products != null) {
-                    company = new Company(name, code, url, products);
-                } else {
-                    company = new Company(name, code, url);
+                    company.setProduct(products);
                 }
 
                 //update

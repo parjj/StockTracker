@@ -35,16 +35,8 @@ public interface DaoAccess {
 
     @Query("SELECT * FROM Product WHERE companyId IS:companyId")
     LiveData<List<Product>> getProductsForCompany(Long  companyId);
-   // List<Product> getProductsForCompany(Long  companyId);
 
-
-    //Product
-
-    //@Query(INSERT INTO Product  )
-   // addProductForComapny()
-
-    @Query("SELECT * FROM Product")
-    LiveData<List<Product>> getAllProducts();
+    //Products
 
     @Insert
     void addNewProduct(Product product);

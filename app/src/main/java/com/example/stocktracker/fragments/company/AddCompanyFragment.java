@@ -23,13 +23,11 @@ public class AddCompanyFragment extends Fragment {
 
     LocalDatabase localDatabase;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,13 +53,12 @@ public class AddCompanyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                company = new Company();
 
-                company.setCompany_name(cName.getText().toString());
-                company.setCompany_stockName(cCode.getText().toString());
-                company.setUrl(cImageUrl.getText().toString());
+                String name = cName.getText().toString();
+                String code = cCode.getText().toString();
+                String url = cImageUrl.getText().toString();
 
-              //  DaoImpl.getInstance().addNewCompany(company);
+                company = new Company(name,code,url);
 
                 new InsertTask(company).execute();
 
@@ -85,7 +82,6 @@ public class AddCompanyFragment extends Fragment {
         });
     }
 
-
     //Async Insert task class
     public class InsertTask extends AsyncTask<Void, Void, Void> {
 
@@ -101,7 +97,4 @@ public class AddCompanyFragment extends Fragment {
             return null;
         }
     }
-
-
-
 }

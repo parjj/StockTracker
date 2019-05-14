@@ -7,7 +7,12 @@
 
     <string name="api_key">06TZZOMBWPSZNJKE</string>
     <string name="api_key_new">MP77SPA5MSCPB839</string>
-
+    <string name="company_name">Company name</string>
+    <string name="company_code">Company code</string>
+    <string name="todo">TODO</string>
+    <string name="rate">rate</string>
+    <string name="product_name">Product name</string>
+    <string name="product_rate">Product Rate</string>
 
 
 

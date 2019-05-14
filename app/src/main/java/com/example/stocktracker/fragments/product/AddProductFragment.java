@@ -54,7 +54,6 @@ public class AddProductFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final FragmentManager manager = getFragmentManager();
 
-
         //save button adds a new product
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +70,6 @@ public class AddProductFragment extends Fragment {
 
                 // add product
                 new InsertProduct(product).execute();
-
                 manager.popBackStack();
             }
         });

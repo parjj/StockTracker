@@ -44,7 +44,6 @@ public class CompanyListAdapter extends ArrayAdapter {
             View view = layoutInflater.inflate(R.layout.company_listitem_layout, parent, false);
             convertView = view;
 
-
         }
 
         new GetStockRate(company, convertView, context).execute();
@@ -57,40 +56,5 @@ public class CompanyListAdapter extends ArrayAdapter {
     }
 
 }
-
-
 // defining a global views makes the concept that needs to be understood here. each company sets for the global view
 // so need to define imageview in getview ()
-
-// when setting up a value sometimes think of defining a common value eg, visible
-
-
-//         JsonReader jsonReader = new JsonReader(streamReader);
-
-//to extract the key value
-//        jsonReader.beginArray();
-//      while (jsonReader.hasNext()) {
-
-//         jsonReader.beginObject();
-//       while (jsonReader.hasNext()) {
-//          String key = jsonReader.nextName();
-
-//         if (key.contains("price")) {
-
-
-//               break;
-//           } else {
-//              jsonReader.skipValue();
-//          }
-//      jsonReader.endObject();
-//       }
-//
-//   jsonReader.close();
-//    }
-
-// use handler for live data update
-/*
-handler1.postDelayed(this, 1000);
-        }
-        };
-        handler1.post(runnable1);*/

@@ -2,6 +2,7 @@ package com.example.stocktracker;
 
 import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
@@ -50,7 +51,9 @@ public class DbInstrumentTest {
     public static void createDb() throws Exception {
 
         Context context = InstrumentationRegistry.getContext();
-        localDatabase = Room.inMemoryDatabaseBuilder(context, LocalDatabase.class).build();
+        localDatabase = Room.databaseBuilder(context,
+                LocalDatabase.class, "company_database.db").build();
+     //  localDatabase= Room.inMemoryDatabaseBuilder(context,LocalDatabase.class).build();
 
 
     }
@@ -107,9 +110,9 @@ public class DbInstrumentTest {
             public void onChanged(List<Product> products) {
 
                 //   assertThat(company.get(0).getModel(), equalTo("Red Bull"));
-                if (products.size() < 2) {
+                if (products.size() < 1) {
 
-                    Assert.assertSame(products.size(), 2);
+                    Assert.assertSame(products.size(), 1);
                 }
 
             }

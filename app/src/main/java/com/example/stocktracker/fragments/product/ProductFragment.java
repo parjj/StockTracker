@@ -34,7 +34,6 @@ import java.util.List;
 
 public class ProductFragment extends Fragment {
 
-
     // this class has the list view by getting datas from add product fragment and the list view is represented by productlistadapter FYR(4 ur ref)
     ImageView logo;
     TextView textView;
@@ -42,7 +41,6 @@ public class ProductFragment extends Fragment {
     List<Product> productNames, products_test;
     Long companyID;
 
-    Bundle bundle;
     Button toolbar_button;
 
     public static final String COMPANY_VALUE = "company value";
@@ -61,12 +59,9 @@ public class ProductFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
         companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,9 +69,6 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.product_page_layout, container, false);
 
         // the company selected
-        bundle = getArguments();
-
-        // int pos = bundle.getInt("selected_position");
         company = companyListFragment.company_main;
         companyID = company.getId();
 
@@ -107,7 +99,7 @@ public class ProductFragment extends Fragment {
         toolbar_textview.setTextSize(20);
         toolbar_textview.setTextColor(getResources().getColor(R.color.darkBrown));
 
-        toolbar.inflateMenu(R.menu.menu_padd);
+        toolbar.inflateMenu(R.menu.menu_add);
 
         //add new products to the company
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {

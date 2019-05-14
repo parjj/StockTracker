@@ -2,8 +2,12 @@ package com.example.stocktracker.fragments.company;
 
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.stocktracker.R;
@@ -42,16 +47,12 @@ public class CompanyListFragment extends Fragment {
     ListView listView;
     CompanyListAdapter companyListAdapter;
     public List<Company> companyNames = new ArrayList<>();
-    List<Company> companyList;
-    public List<Product> productList, productNames;
 
     public Company company_main;
-    public Product product_main;
     Button toolbar_button;
 
-    public static final String COMPANY_VALUE = "company value";
     public static final String COMPANY_FRAGMENT = "company_fragment";
-    public static final String DATABASE_NAME = "stock-database";
+    public static final String DATABASE_NAME = "company_database";
 
     DaoImpl dao;
     LocalDatabase localDatabase;
@@ -60,42 +61,49 @@ public class CompanyListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getContext();
 
-       checkForDatabase();
+        context = getContext();
+        if(!isNetworkAvailable()){
+            Toast.makeText(getContext().getApplicationContext(), "No stock rates, will get your rates once network is back", Toast.LENGTH_LONG).show();
+        }
+
 
         localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
+        checkForDatabase();
+        livedataCheck();   // Room Database live data check
+
+        initrun();
+
     }
 
     private void checkForDatabase() {
 
         File dbFilePath = context.getDatabasePath(DATABASE_NAME);
-       // if(!dbFilePath.exists()){
-            dbFilePath.getParentFile().mkdirs();
+        if(!dbFilePath.exists()){
+        dbFilePath.getParentFile().mkdirs();
 
-            // Try to copy database file
-            try {
-                final InputStream inputStream = context.getAssets().open("data/" + DATABASE_NAME + ".db");
-                final OutputStream output = new FileOutputStream(dbFilePath);
+        // Try to copy database file
+        try {
+            final InputStream inputStream = context.getAssets().open("data/" + DATABASE_NAME + ".db");
+            final OutputStream output = new FileOutputStream(dbFilePath);
 
-                byte[] buffer = new byte[8192];
-                int length;
+            byte[] buffer = new byte[8192];
+            int length;
 
-                while ((length = inputStream.read(buffer, 0, 8192)) > 0) {
-                    output.write(buffer, 0, length);
-                }
-
-                output.flush();
-                output.close();
-                inputStream.close();
+            while ((length = inputStream.read(buffer, 0, 8192)) > 0) {
+                output.write(buffer, 0, length);
             }
-            catch (IOException e) {
-                Log.d("DB Message", "Failed to open file", e);
-                e.printStackTrace();
-            }
-       // }else{
-       //     return;
-       // }
+
+            output.flush();
+            output.close();
+            inputStream.close();
+        } catch (IOException e) {
+            Log.d("DB Message", "Failed to open file", e);
+            e.printStackTrace();
+        }
+    }else {
+            return;
+        }
     }
 
     @Override
@@ -103,14 +111,9 @@ public class CompanyListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.company_list, container, false);
 
-       // datas();
-
-
         //listview definitions
         listView = view.findViewById(android.R.id.list);
         listView.setEmptyView(view.findViewById(R.id.company_emptyLayout));
-
-        livedataCheck();   // Room Database live data check
 
         //Toolbar definitions
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -188,7 +191,7 @@ public class CompanyListFragment extends Fragment {
                 if (toolbar_button.getText().equals("Edit")) {
 
                     editToDoneCall();   // done page
-                } else if(toolbar_button.getText().equals("Done")){
+                } else if (toolbar_button.getText().equals("Done")) {
 
                     doneToEditCall();   //edit page :home page
                 }
@@ -210,18 +213,13 @@ public class CompanyListFragment extends Fragment {
     public void doneToEditCall() {
 
         // done button
-      //  toolbar_button.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-          //  public void onClick(View v) {
-                toolbar_button.setText("Edit");
-                toolbar_button.setClickable(true);
-                listView.setBackgroundResource(R.color.white);
-                companyListAdapter.visible = View.GONE;
-                listViewListner();
-                toolbarListener();
-                reload();
-            //}
-        //});
+        toolbar_button.setText("Edit");
+        toolbar_button.setClickable(true);
+        listView.setBackgroundResource(R.color.white);
+        companyListAdapter.visible = View.GONE;
+        listViewListner();
+        toolbarListener();
+        reload();
     }
 
     //edit functionality
@@ -241,6 +239,7 @@ public class CompanyListFragment extends Fragment {
                 editCompanyFragment.setArguments(bundle);
                 fragmentTransaction.addToBackStack("company_list_edit");  // when you click delete from edit company and this line isn't defined the page doesn't come  back
                 fragmentTransaction.commit();
+
             }
         });
     }
@@ -258,8 +257,6 @@ public class CompanyListFragment extends Fragment {
     // room database live data check
     public void livedataCheck() {
 
-
-
         //database
         localDatabase.daoAccess().getAllCompanies().observe(CompanyListFragment.this, new Observer<List<Company>>() {
             @Override
@@ -273,53 +270,42 @@ public class CompanyListFragment extends Fragment {
         });
     }
 
-    //room database live data product check
-
-
     public void reload() {
-        if(companyListAdapter==null) {
+        if (companyListAdapter == null) {
             companyListAdapter = new CompanyListAdapter(getContext(), companyNames);
             listView.setAdapter(companyListAdapter);
-        }
-        else {
+        } else {
             companyListAdapter.notifyDataSetChanged();
+
         }
 
     }
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected() && activeNetworkInfo.isAvailable()) {
+            return true;
+        } else {
+            return false;
 
-    //async class tasks
-
-    //Async Insert task class
-    public class InsertCompanyMain extends AsyncTask<Void, Void, Void> {
-
-        Company in_company;
-
-        public InsertCompanyMain(Company company) {
-            this.in_company = company;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            localDatabase.daoAccess().addNewCompany(in_company);
-            return null;
         }
     }
 
-    // datas
-    void datas() {
+    public void initrun(){
+        final Handler handler= new Handler();
+        final int timer= 60000;
+        final long[] i = {0};
 
-        companyList = new ArrayList<>();
-        // companyList.add(new Company("WWE", "WWE", "https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Fblakeoestriecher%2Ffiles%2F2016%2F05%2Fwwe-1200x1200.jpg", productList));
-        companyList.add(new Company("WWE", "WWE", "https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Fblakeoestriecher%2Ffiles%2F2016%2F05%2Fwwe-1200x1200.jpg"));
-
-        //apple company
-        companyList.add(new Company("Apple", "AAPL", "https://cdn4.iconfinder.com/data/icons/socialcones/508/Apple-512.png"));
-
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                companyListAdapter.notifyDataSetChanged();
+                Log.d(" n times", String.valueOf(i[0]++));
+                handler.postDelayed(this,timer);
+            }
+        },timer);
     }
-
 }
 
-
-/// when you click on wwe and come back not able to click the edit button check this issue
 
 

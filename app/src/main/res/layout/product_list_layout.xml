@@ -10,7 +10,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="6dip"
-        android:src="@drawable/ic_launcher_background" />
+        android:src="@drawable/ic_launcher_background"
+        android:contentDescription="@string/todo"
+        android:layout_marginEnd="6dip" />
 
     <TextView
         android:id="@+id/product_name"
@@ -22,8 +24,10 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_toRightOf="@id/product_image"
         android:gravity="center_vertical"
-        android:hint="Product name"
-        android:textSize="16sp" />
+        android:hint="@string/product_name"
+        android:textSize="16sp"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/product_image" />
 
     <TextView
         android:id="@+id/product_rate"
@@ -32,8 +36,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/product_image"
-        android:hint="Product Rate"
-        android:textSize="12sp" />
+        android:hint="@string/product_rate"
+        android:textSize="12sp"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/product_image" />
 
 
 

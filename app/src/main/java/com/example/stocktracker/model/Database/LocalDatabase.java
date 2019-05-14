@@ -19,9 +19,8 @@ public abstract class LocalDatabase extends RoomDatabase {
 
         if(db==null){
 
-          //  db= Room.inMemoryDatabaseBuilder(context,LocalDatabase.class).build();
              db = Room.databaseBuilder(context,
-                   LocalDatabase.class, "stock-database").build();
+                   LocalDatabase.class, "company_database").build();
 
         }
         return  db;

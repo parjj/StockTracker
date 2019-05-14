@@ -3,6 +3,45 @@
 /data/data/com.example.stocktracker/databases/stock-database
 
 
+-----------------------------------------------------------------------
+    /*@Ignore
+    public Company(String company_name, double rate) {
+        this.company_name = company_name;
+        this.rate = rate;
+
+    }
+
+    @Ignore
+    public Company(String company_name, String company_stockName) {
+        this.company_name = company_name;
+        this.company_stockName = company_stockName;
+    }
+
+     @Ignore
+    public Company() {
+    }
+
+    @Ignore
+    public Company(String company_name, double rate,  String url, String company_stockName, List<Product> product) {
+        this.company_name = company_name;
+        this.rate = rate;
+        this.url = url;
+        this.company_stockName = company_stockName;
+        this.product = product;
+    } */
+
+--------------------------------------------------------
+ final Handler handler= new Handler();
+         final int timer= 60000;  //milliseconds
+
+        Runnable runnable= new Runnable() {
+            @Override
+            public void run() {
+ handler.postDelayed(this, timer);
+                Toast.makeText(context, "Stock rate is running", Toast.LENGTH_SHORT).show();
+            }
+        };
+            handler.post(runnable);
 android:icon="@drawable/btn_back"
 
 
@@ -16,34 +55,7 @@ android:icon="@drawable/btn_back"
 //    }
 //    return checkDB != null;
 
-/*
-
-/*
-
-        onView(withId(R.id.webProdName)).perform(typeText("Google Home"), closeSoftKeyboard());
-        onWebView().check(webMatches(getCurrentUrl(), containsString("https://www.bestbuy.com/site/google-home-smart-speaker-with-google-assistant-white-slate/5578849.p?skuId=5578849"))).perform(webClick());
-
-        onView(withText("Edit")).perform(click());
-
-        onView(withId(R.id.editPName)).perform(typeText("Google Home White"), closeSoftKeyboard());
-        onView(withText("save")).perform(click());
-*/
-
-
-
-
-
-
-    /*  *//*  onView(withId(R.menu.menu_add)).perform(click());
-        onView(withId(R.id.adCName)).perform(typeText("Apple"), closeSoftKeyboard());
-        onView(withId(R.id.adCCode)).perform(typeText("AAPL"), closeSoftKeyboard());
-        onView(withId(R.id.rate)).perform(typeText("113.434"), closeSoftKeyboard());
-        onView(withId(R.id.adCImage)).perform(typeText("https://cdn4.iconfinder.com/data/icons/socialcones/508/Apple-512.png"), closeSoftKeyboard());
-
-        onData(anything()).inAdapterView(withId(android.R.id.list)).atPosition(2).perform(click());
-
-    } *//*
-
+-----------------------------------------------------------
  Matcher<View> hasValueEqualTo(final String content) {
 
         return new TypeSafeMatcher<View>() {
@@ -72,17 +84,7 @@ android:icon="@drawable/btn_back"
             }
         };
     }
-
-
-
-
-
-
-
-
-
-
-
+----------------------------------------------------------------
   /*  //wwe company
         productList = new ArrayList<>();
         productList.add(new Product("WWE Shirt", "https://kenaishop.com/products/wwe-logo-graphic-hoodie?gclid=EAIaIQobChMI6KiTs5_74QIVhoSzCh0F9gb1EAkYESABEgLtlPD_BwE", "https://cdn.shopify.com/s/files/1/0125/6823/2000/products/DynamicImageHandler_6e0bc2b2-cdaa-4b29-99ef-d15cc7c0222d_800x.png?v=1545208093"));
@@ -115,116 +117,34 @@ android:icon="@drawable/btn_back"
 
 */
 
- /*   for (Company company : companyNames) {
-
-            new InsertCompanyMain(company).execute();
-            productList = company.getProduct();
-
-            for (Product pr : productList) {
-                pr.setCompanyId(company.getId());
-                new InsertProductMain(pr).execute();
-
-                //new AddProductsForCompany(company).execute();
-            }
-        }*/
+-------------------------------------------------------
+// when setting up a value sometimes think of defining a common value eg, visible
 
 
- /*  //database
-        localDatabase.daoAccess().getAllProducts().observe(ProductFragment.this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(@Nullable List<Product> products) {                                // companies value is returned from database
-                productNames.clear();
-                productNames.addAll(products);
+//         JsonReader jsonReader = new JsonReader(streamReader);
 
-                reload();
-            }
-        });*/
+//to extract the key value
+//        jsonReader.beginArray();
+//      while (jsonReader.hasNext()) {
 
+//         jsonReader.beginObject();
+//       while (jsonReader.hasNext()) {
+//          String key = jsonReader.nextName();
 
-  for (int i = 0; i < productNames.size(); i++) {
-
-            product = productNames.get(i);
-            product.setCompanyId(companyID);
-            productNames.set(i, product);
-        }
+//         if (key.contains("price")) {
 
 
+//               break;
+//           } else {
+//              jsonReader.skipValue();
+//          }
+//      jsonReader.endObject();
+//       }
+//
+//   jsonReader.close();
+//    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-companylistfragment----> productfragment---->addproductfragment
-
-check the working of floating button too
-------------------------------------------
-
-/*   1 method of doing
-
-  httpURLConnection = (HttpURLConnection) url.openConnection();
-
-
-          int responseCode = httpURLConnection.getResponseCode();
-
-          if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                  httpURLConnection.setRequestMethod("GET");
-                  InputStream inputStream = httpURLConnection.getInputStream();
-
-                  sendAndRequestResponse(url.toString());
-
-
-                  InputStreamReader streamReader =
-                  new InputStreamReader(inputStream, "UTF-8");
-
-                  BufferedReader bstreamReader = new BufferedReader(streamReader);
-                  StringBuilder responseStrBuilder = new StringBuilder();
-
-                  String inputStr;
-                  while ((inputStr = bstreamReader.readLine()) != null)
-                  responseStrBuilder.append(inputStr);
-
-                  JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
-
-                  rate_value = jsonObject.getJSONObject("Global Quote").getDouble("05. price");
-                  company.setRate(rate_value);*/
-
-
-
-   /* //String Request initialized
-    StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_string, new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-
-            Toast.makeText(context,"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
-
-        }
-    }, new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-
-            Log.i(TAG,"Error :" + error.toString());
-        }
-    });
-*/
-
-
+-------------------------------------------------------------------------
    /*    using volley
             //RequestQueue initialized
             RequestQueue mRequestQueue = Volley.newRequestQueue(context);
@@ -345,35 +265,6 @@ ShortURL.makeShortUrl(longUrl, new ShortUrlListener() {
 
 ----------------------------------------------------------------------
 
-add product toolbar
-
-/*        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.sepia));
-        toolbar_button= view.findViewById(R.id.toolbarButton);
-        toolbar_buttonEnd= view.findViewById(R.id.toolbarButtonEnd);
-        TextView toolbar_textview = view.findViewById(R.id.toolbarText);
-        toolbar_button.setBackgroundResource(R.drawable.ic_arrow_back_black_24dp);
-        //toolbar_button.setTextColor(getResources().getColor(R.color.peralishWhite));
-       // toolbar_textview.setTextSize(16);
-        toolbar_textview.setText("Add Product");
-        toolbar_buttonEnd.setText("Save");
-        toolbar_textview.setTextColor(getResources().getColor(R.color.greenishGrayBlack));
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);*/
-
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(PRODUCT_CLASS, product);
-
-        return true;
-    }
-
-
-
 imageview1.setImageBitmap(webview1.getFavicon());
 
 private Bitmap fetchFavicon(Uri uri) {
@@ -399,7 +290,7 @@ private Bitmap fetchFavicon(Uri uri) {
 ----------------------------------------------------------------------------------------------------------------------------------------
 https://userscontent2.emaze.com/images/dc1bd939-2c82-4b65-9a4a-d30754860c2c/e90b0328-8342-4ab9-9661-3f83690e1d51image01.png    Tesla
 https://image.flaticon.com/teams/slug/google.jpg                                                    Google
-https://cdn4.iconfinder.com/data/icons/socialcones/508/Apple-512.png                                                   Apple
+https://sslinvest.com/wp-content/uploads/2018/10/apple-logo.jpg                                                  Apple
 http://1.bp.blogspot.com/-RRnuo67oT2c/UgF29or5qwI/AAAAAAAAO_I/zM9Dr5e3QvM/s1600/Twitter+for+Android.png                        Twitter
 https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Fblakeoestriecher%2Ffiles%2F2016%2F05%2Fwwe-1200x1200.jpg  wwe
 
@@ -431,44 +322,6 @@ apple
 
 speaker    https://cdn.vox-cdn.com/thumbor/N6jaV5b3Fbc_U7t7IXHqBJgZk-w=/0x0:2040x1360/1200x800/filters:focal(857x517:1183x843)/cdn.vox-cdn.com/uploads/chorus_image/image/58421759/v_8A0A9690.0.jpg
 ------------------------------------------------------------------------------------------------------------------------------------------
-listView.getAdapter().getItemCount();
-@Override
-protected void onRestoreInstanceState (Bundle savedInstanceState) {
-    this.mPersonList = savedInstanceState.getStringArrayList("mPersonList"); //on coming back retrieve all values using key
-        }
-
-
-  //Picasso.get().load("http://i.imgur.com/DvpvklR.png").into(imageView);
-        //Picasso.get().load(R.drawable.X).into(imageView);
-
-
-        // find your RecyclerView
-         RecyclerView recyclerView = (RecyclerView) view
-
-        .findViewById(http://R.id.product_list_recycler_view);
-
-        //Attach a Layout Manager to it
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(
-
-        getActivity().getBaseContext()));
-
-        //Add Adapter to it
-
-        recyclerView.setAdapter(new ProductListAdapter(subcategoryKey,
-
-        getActivity(), isShoppingList));
-
-
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:padding="10dp"
-        android:orientation="vertical" />
 
 
 You don't need to override onCreateOptionsMenu in your Fragment class again. Menu items can be changed (Add/remove) by overriding onPrepareOptionsMenumethod available in Fragment.
@@ -514,76 +367,3 @@ public void onPrepareOptionsMenu(Menu menu) {
                 });
 --------------------------------------------------------------------------------------------------------------
 
-
-  /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_edit, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String text = item.getTitle().toString();
-       Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-        return super.onOptionsItemSelected(item);
-    }*/
-    -----------------------------------------------
-
-        //    bundle.putSerializable(COMPANY_CLASS,company);
-             FragmentManager fragmentManager = getFragmentManager();
-                     //   FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        //                CompanyListFragment companyListFragment = new CompanyListFragment();
-                    //    fragmentTransaction.add(R.id.fragment_container, companyListFragment);
-                    //    companyListFragment.setArguments(bundle);
-
------------------------------------------------------------
-
- /* List<Fragment> fg= getFragmentManager().getFragments();
-                ProductFragment pd= new ProductFragment();
-                if(fg.contains(pd)){}*/
-
-
-   ArrayList a = new ArrayList();
-                ProductFragment p1= new ProductFragment();
-                ProductFragment p2= new ProductFragment();
-                ProductFragment p3= new ProductFragment();
-
-
-                a.add(p1);
-                a.add(p2);
-
-                a.contains(p3);
- why cant we call adapter.notifydatasetchanged inside menu
-
- also how to use get and set method of product and company inside   db check dbexample
- ----------------------------------------------------------------------------------------------
- /* @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
-
-         int i = item.getItemId();
-         FragmentManager fm = getFragmentManager();
-         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-
-         List<Fragment> fg = getFragmentManager().getFragments();
-
-         switch (item.getItemId()) {
-             case R.id.addMenuP:
-                 AddProductFragment addProductFragment = new AddProductFragment();
-                 fm.getFragments().add(addProductFragment);
-                 fragmentTransaction.add(R.id.fragment_container, addProductFragment);
-                 fragmentTransaction.addToBackStack("product_fragmentlist");
-                 fragmentTransaction.commit();
-                 break;
-
-             case R.id.addMenu:
-                 AddCompanyFragment addCompanyFragment = new AddCompanyFragment();
-                 fragmentTransaction.add(R.id.fragment_container, addCompanyFragment);
-                 fragmentTransaction.addToBackStack("company_fragmentlist");
-                 fragmentTransaction.commit();
-                 break;
-         }
-
-         return true;
-     }
- */

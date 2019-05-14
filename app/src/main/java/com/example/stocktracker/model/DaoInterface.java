@@ -15,11 +15,9 @@ import java.util.List;
 @Dao
 public interface DaoInterface {
 
-
     //Company
     List<Company> getAllCompanies();
    // LiveData<List<Person>> fetchAllPersons();
-
 
     Company getCompany(int position);
 
@@ -35,7 +33,6 @@ public interface DaoInterface {
     //Product
 
     //List<Product> getAllProducts();
-
 
     Product getProduct(int position);
 
