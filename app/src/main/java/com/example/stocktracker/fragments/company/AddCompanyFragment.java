@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.DaoInterface;
+import com.example.stocktracker.model.database.DaoRoomImpl;
+import com.example.stocktracker.model.database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 
 public class AddCompanyFragment extends Fragment {
@@ -22,6 +24,7 @@ public class AddCompanyFragment extends Fragment {
     Company company;
 
     LocalDatabase localDatabase;
+    DaoInterface daoInterface;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +42,10 @@ public class AddCompanyFragment extends Fragment {
         cImageUrl = view.findViewById(R.id.adCImage);
         saveC = view.findViewById(R.id.bCsave);
         cancelC = view.findViewById(R.id.bCCancel);
+
+        daoInterface= DaoRoomImpl.getInstance(getContext());
+
+
         return view;
 
     }
@@ -61,6 +68,8 @@ public class AddCompanyFragment extends Fragment {
                 company = new Company(name,code,url);
 
                 new InsertTask(company).execute();
+
+
 
                 //i am adding a dao and again i am calling the companylistfrag for adding it to the companyNames
                 //is this really necessary , can we just have one line of addNewCompany and that reflect the changes in the listView without
@@ -93,7 +102,7 @@ public class AddCompanyFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            localDatabase.daoAccess().addNewCompany(in_company);
+            daoInterface.addNewCompany(in_company);
             return null;
         }
     }

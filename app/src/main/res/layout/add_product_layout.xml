@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/reddishPink"
+    android:clickable="false"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -16,35 +17,41 @@
         android:layout_marginBottom="50dp"
         android:background="@drawable/border"
         android:padding="15dp"
-        android:text="ADD PRODUCT"
+        android:text="Add Product"
         android:textAlignment="center"
-        android:textSize="21dp"
-        android:textStyle="bold" />
+        android:textSize="21sp"
+        android:textStyle="bold" tools:targetApi="o" />
 
     <EditText
         android:id="@+id/adPName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Product Name"
+        android:hint="@string/productname"
         android:cursorVisible="true"
         android:padding="10dp"
-        android:textSize="15dp" />
+        android:textSize="15sp"
+        android:importantForAutofill="no"
+        android:inputType="" tools:targetApi="o" />
 
     <EditText
         android:id="@+id/adPUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Product URL"
+        android:hint="@string/product_url"
         android:padding="10dp"
-        android:textSize="15dp" />
+        android:textSize="15sp"
+        android:importantForAutofill="no"
+        android:inputType="" tools:targetApi="o" />
 
     <EditText
         android:id="@+id/adPImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Poduct image URL"
+        android:hint="@string/poduct_image_url"
         android:padding="10dp"
-        android:textSize="15dp" />
+        android:textSize="15sp"
+        android:importantForAutofill="no"
+        android:inputType="" tools:targetApi="o" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,16 +63,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="?android:attr/buttonBarStyle"
             android:background="@android:color/transparent"
-            android:text="cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/b2save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="?android:attr/buttonBarStyle"
             android:background="@android:color/transparent"
-            android:text="save" />
+            android:text="@string/save" />
     </LinearLayout>
 
 </LinearLayout>

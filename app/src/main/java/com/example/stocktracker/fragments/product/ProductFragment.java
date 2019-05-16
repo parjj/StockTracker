@@ -1,7 +1,7 @@
 package com.example.stocktracker.fragments.product;
 
 import android.arch.lifecycle.Observer;
-import android.os.AsyncTask;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,32 +21,30 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.adapter.CompanyListAdapter;
 import com.example.stocktracker.adapter.ProductListAdapter;
 import com.example.stocktracker.fragments.company.CompanyListFragment;
-import com.example.stocktracker.model.DaoImpl;
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.DaoInterface;
+import com.example.stocktracker.model.IDaoUpdateDelegate;
+import com.example.stocktracker.model.database.DaoRoomImpl;
+import com.example.stocktracker.model.database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements IDaoUpdateDelegate {
 
     // this class has the list view by getting datas from add product fragment and the list view is represented by productlistadapter FYR(4 ur ref)
     ImageView logo;
     TextView textView;
     ListView listView;
-    List<Product> productNames, products_test;
+    List<Product> productNames;
     Long companyID;
 
     Button toolbar_button;
 
-    public static final String COMPANY_VALUE = "company value";
-    public static final String PRODUCT_VALUE = "product value";
     public static final String PRODUCT_FRAGMENT = "product_fragment";
 
     ProductListAdapter productListAdapter;
@@ -53,15 +53,25 @@ public class ProductFragment extends Fragment {
     Product product;
 
     LocalDatabase localDatabase;
+    DaoInterface daoInterface;
+    Context context;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        context = getContext();
         localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
         companyListFragment = (CompanyListFragment) getFragmentManager().getFragments().get(0);
+        daoInterface = DaoRoomImpl.getInstance(context);
+
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,14 +86,15 @@ public class ProductFragment extends Fragment {
             productNames = new ArrayList<>();
         }
 
+        daoInterface.addDaoUpdateDelegate(this);
+        daoInterface.getProductsForCompanyId(companyID);
+
         //listview checks
         listView = view.findViewById(R.id.plist);
         listView.setEmptyView(view.findViewById(R.id.product_emptyLayout));
 
         productListAdapter = new ProductListAdapter(getContext(), productNames);
         listView.setAdapter(productListAdapter);
-
-        productLivedataCheck();     // Room database live data check
 
         //Toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -124,6 +135,10 @@ public class ProductFragment extends Fragment {
         textView.setText(company.getCompany_name() + "(" + company.getCompany_stockName() + ")");
         Picasso.get().load(company.getUrl()).resize(512, 512).into(logo);
 
+       // daoInterface.removeDaoUpdateDelegate(companyListFragment);
+        daoInterface.addDaoUpdateDelegate(this);
+
+
         return view;
 
     }
@@ -139,7 +154,7 @@ public class ProductFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("prod_position", position);
-                product= (Product) listView.getItemAtPosition(position);
+                product = (Product) listView.getItemAtPosition(position);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 WebViewProduct webViewProduct = new WebViewProduct();
@@ -154,24 +169,11 @@ public class ProductFragment extends Fragment {
         toolbar_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                daoInterface.removeDaoUpdateDelegate(ProductFragment.this);
                 getFragmentManager().popBackStack();
             }
         });
 
-    }
-
-    public void productLivedataCheck() {
-
-        //database
-        localDatabase.daoAccess().getProductsForCompany(companyID).observe(ProductFragment.this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(@Nullable List<Product> products) {                                // companies value is returned from database
-                productNames.clear();
-                productNames.addAll(products);
-
-                reload();
-            }
-        });
     }
 
     //adapter notify
@@ -179,4 +181,13 @@ public class ProductFragment extends Fragment {
         productListAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onUpdateResult(int resultCode, Object result)  {
+
+        if(resultCode==2) {
+            productNames.clear();
+            productNames.addAll((List<Product>) result);
+            reload();
+        }
+    }
 }

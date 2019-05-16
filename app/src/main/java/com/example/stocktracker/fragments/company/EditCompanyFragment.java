@@ -14,8 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.DaoImpl;
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.DaoInterface;
+import com.example.stocktracker.model.database.DaoRoomImpl;
+import com.example.stocktracker.model.database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 
@@ -31,6 +32,7 @@ public class EditCompanyFragment extends Fragment {
 
     Bundle bundle;
     LocalDatabase localDatabase;
+    DaoInterface daoInterface;
 
     CompanyListFragment companyListFragment;
 
@@ -50,9 +52,9 @@ public class EditCompanyFragment extends Fragment {
         bundle = getArguments();
         int pos = bundle.getInt("position");
         company = companyListFragment.companyNames.get(pos);
-        company_id=company.getId();
+        company_id = company.getId();
 
-        products= company.getProduct();
+        products = company.getProducts();
 
         edit_cName = view.findViewById(R.id.editCName);
         edit_cCode = view.findViewById(R.id.editCCode);
@@ -78,6 +80,8 @@ public class EditCompanyFragment extends Fragment {
         toolbar_textview.setTextSize(20);
         toolbar_textview.setTextColor(getResources().getColor(R.color.darkBrown));
 
+        daoInterface= DaoRoomImpl.getInstance(getContext());
+
         return view;
     }
 
@@ -90,12 +94,6 @@ public class EditCompanyFragment extends Fragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //delete
-                // DaoImpl.getInstance().deleteCompany(company);
-                // companyListFragment.localDatabase.daoAccess().deleteCompany(company);
-                // Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
-                // on using this , instead define the new DeleteTask()
 
                 new DeleteCompany(company).execute();
                 getFragmentManager().popBackStack();
@@ -129,7 +127,7 @@ public class EditCompanyFragment extends Fragment {
                 company.setUrl(url);
 
                 if (products != null) {
-                    company.setProduct(products);
+                    company.setProducts(products);
                 }
 
                 //update
@@ -153,9 +151,7 @@ public class EditCompanyFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Company... companies) {
-            Long id= del_company.getId();
-            localDatabase.daoAccess().deleteCompany(del_company);
-            localDatabase.daoAccess().deleteProductforCompany(id);
+            daoInterface.deleteCompany(del_company);
             return null;
         }
 
@@ -173,7 +169,8 @@ public class EditCompanyFragment extends Fragment {
 
         @Override
         protected Company doInBackground(Void... people) {
-            localDatabase.daoAccess().updateCompany(up_company);
+
+            daoInterface.updateCompany(up_company);
             return up_company;
         }
     }

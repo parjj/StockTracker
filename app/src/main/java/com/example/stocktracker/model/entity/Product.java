@@ -28,9 +28,7 @@ public class Product implements Serializable {
 
     @Ignore
     public Product(String product_name, String product_url, String product_image) {
-        this.product_name = product_name;
-        this.product_url = product_url;
-        this.product_image = product_image;
+        this(null,product_name,product_url,product_image,null);
     }
 
     public Product(Long id, String product_name, String product_url, String product_image, Long companyId) {

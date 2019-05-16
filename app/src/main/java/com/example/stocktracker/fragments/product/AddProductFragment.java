@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.DaoInterface;
+import com.example.stocktracker.model.database.DaoRoomImpl;
+import com.example.stocktracker.model.database.LocalDatabase;
 import com.example.stocktracker.model.entity.Product;
 
 public class AddProductFragment extends Fragment {
@@ -20,7 +22,7 @@ public class AddProductFragment extends Fragment {
     Button save, cancel;
     Product product;
 
-    LocalDatabase localDatabase;
+    DaoInterface daoInterface;
 
     ProductFragment productFragment;
 
@@ -28,7 +30,7 @@ public class AddProductFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
+        daoInterface = DaoRoomImpl.getInstance(getContext());
         product = new Product();
         productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
 
@@ -96,7 +98,7 @@ public class AddProductFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            localDatabase.daoAccess().addNewProduct(in_product);
+           daoInterface.addNewProduct(in_product);
             return null;
         }
     }

@@ -1,25 +1,20 @@
 package com.example.stocktracker;
 
-import android.app.Activity;
-import android.app.Application;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
-import android.widget.EditText;
 
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

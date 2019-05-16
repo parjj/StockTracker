@@ -27,21 +27,24 @@ public class Company implements Serializable {
     private List<Product> product;
 
     public Company(Long id, String company_name, String url, String company_stockName) {
-        this.id = id;
-        this.company_name = company_name;
-        this.url = url;
-        this.company_stockName = company_stockName;
+
+        this(id, company_name, company_stockName, url, null);
+
     }
 
     @Ignore
     public Company(String company_name, String company_stockName,String url) {
-        this.company_name = company_name;
-        this.company_stockName = company_stockName;
-        this.url=url;
+        this(null, company_name, company_stockName, url, null);
     }
 
     @Ignore
     public Company(String company_name, String company_stockName, String url,  List<Product> product) {
+        this(null, company_name, company_stockName, url, product);
+    }
+
+    @Ignore
+    public Company(Long id, String company_name, String company_stockName, String url,  List<Product> product) {
+        this.id=id;
         this.company_name = company_name;
         this.rate = rate;
         this.url = url;
@@ -89,11 +92,11 @@ public class Company implements Serializable {
         this.company_stockName = company_stockName;
     }
 
-    public List<Product> getProduct() {
+    public List<Product> getProducts() {
         return product;
     }
 
-    public void setProduct(List<Product> product) {
+    public void setProducts(List<Product> product) {
         this.product = product;
     }
 }

@@ -13,7 +13,11 @@
     <string name="rate">rate</string>
     <string name="product_name">Product name</string>
     <string name="product_rate">Product Rate</string>
-
+    <string name="product_url">Product URL</string>
+    <string name="poduct_image_url">Poduct image URL</string>
+    <string name="productname">Product Name</string>
+    <string name="cancel">cancel</string>
+    <string name="save">save</string>
 
 
     <string-array name="Comapnies">

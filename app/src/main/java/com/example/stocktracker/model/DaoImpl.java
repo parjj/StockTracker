@@ -69,17 +69,27 @@ public class DaoImpl implements DaoInterface {
 
     //Company
 
-    @Query("SELECT * FROM Company")
     @Override
-    public List<Company> getAllCompanies() {
-        return companyList;
+    public void addDaoUpdateDelegate(IDaoUpdateDelegate delegate) {
+
     }
 
     @Override
+    public void removeDaoUpdateDelegate(IDaoUpdateDelegate delegate) {
+
+    }
+
+    @Query("SELECT * FROM Company")
+    @Override
+    public void getAllCompanies() {
+        //return companyList;
+    }
+
+    /*@Override
     public Company getCompany(int position) {
         companyInfo = companyList.get(position);
         return companyInfo;
-    }
+    }*/
 
     @Override
     public void addNewCompany(Company company) {
@@ -102,11 +112,21 @@ public class DaoImpl implements DaoInterface {
     }
 
     @Override
-    public List<Product> getProductsForCompany(Company company) {
+    public void getProductsForCompanyId(Long id) {
+
+    }
+
+   /* @Override
+    public List<Product> getProductsForCompany(Long id) {
+        return products;
+    }*/
+
+   /* @Override
+    public List<Product> getProductsForCompany(Long id ) {
         this.companyInfo=company;
         products=companyInfo.getProduct();
         return products;
-    }
+    }*/
 
 
     //Product
@@ -116,16 +136,16 @@ public class DaoImpl implements DaoInterface {
         return productList;
     }
 */
-    @Override
-    public Product getProduct(int position) {
+   /* @Override
+    public Product getProducts(int position) {
 
         productInfo = products.get(position);
         return productInfo;
-    }
+    }*/
 
     @Override
     public void addNewProduct(Product product) {
-        products=companyInfo.getProduct();
+        products=companyInfo.getProducts();
         if(products==null){
             products=new ArrayList<>();
         }

@@ -1,4 +1,4 @@
-package com.example.stocktracker.model.Database;
+package com.example.stocktracker.model.database;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -25,4 +25,6 @@ public abstract class LocalDatabase extends RoomDatabase {
         }
         return  db;
     }
+
+
 }

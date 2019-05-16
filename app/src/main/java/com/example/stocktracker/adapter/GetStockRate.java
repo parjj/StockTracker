@@ -43,6 +43,7 @@ public class GetStockRate extends AsyncTask<Void, Void, Company> {
         this.company = company;
         this.convertView = view;
         this.context = context;
+        this.convertView.setTag(this.company.getId());
     }
 
     @Override
@@ -114,8 +115,11 @@ public class GetStockRate extends AsyncTask<Void, Void, Company> {
     @Override
     protected void onPostExecute(Company company) {
 
-        TextView text_rate = convertView.findViewById(R.id.rate);
-        double d = company.getRate();
-        text_rate.setText("Rate: $" + d);
-    }
+        if(convertView.getTag()==company.getId()){
+            TextView text_rate = convertView.findViewById(R.id.rate);
+            double d = company.getRate();
+            text_rate.setText("Rate: $" + d);
+        }
+
+     }
 }

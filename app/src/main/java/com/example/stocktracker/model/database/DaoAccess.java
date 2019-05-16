@@ -1,4 +1,4 @@
-package com.example.stocktracker.model.Database;
+package com.example.stocktracker.model.database;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -19,7 +19,10 @@ public interface DaoAccess {
 
     @Query("SELECT * FROM Company")
     LiveData<List<Company>> getAllCompanies();
-    // LiveData<List<Person>> fetchAllPersons();
+
+    @Query("SELECT * FROM Company")
+    List<Company> getCompanies();
+
 
     @Query("SELECT * FROM Company WHERE id IS:position")
     Company getCompany(int position);

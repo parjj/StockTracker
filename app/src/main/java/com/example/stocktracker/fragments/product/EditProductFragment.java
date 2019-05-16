@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 import com.example.stocktracker.R;
 import com.example.stocktracker.fragments.company.CompanyListFragment;
-import com.example.stocktracker.model.DaoImpl;
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.DaoInterface;
+import com.example.stocktracker.model.database.DaoRoomImpl;
+import com.example.stocktracker.model.database.LocalDatabase;
 import com.example.stocktracker.model.entity.Product;
 
 public class EditProductFragment extends Fragment {
@@ -31,7 +32,7 @@ public class EditProductFragment extends Fragment {
     WebViewProduct webViewProduct;
     ProductFragment productFragment;
     CompanyListFragment companyListFragment;
-    LocalDatabase localDatabase;
+    DaoInterface daoInterface;
 
 
     @Override
@@ -40,7 +41,7 @@ public class EditProductFragment extends Fragment {
 
         webViewProduct = (WebViewProduct) getFragmentManager().findFragmentByTag("webview_fragment");
         productFragment = (ProductFragment) getFragmentManager().findFragmentByTag("prod_list");
-        localDatabase= LocalDatabase.getDb(getContext().getApplicationContext());
+        daoInterface = DaoRoomImpl.getInstance(getContext());
     }
 
     @Override
@@ -114,9 +115,11 @@ public class EditProductFragment extends Fragment {
                 product.setProduct_image(image);
 
                 new UpdateProduct(product).execute();
+                //companyListFragment.reload();
 
                 webViewProduct.product_web.loadUrl(product.getProduct_url());
                 webViewProduct.product_select.setText(product.getProduct_name());
+
 
                 getFragmentManager().popBackStackImmediate();
             }
@@ -134,7 +137,7 @@ public class EditProductFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... people) {
-            localDatabase.daoAccess().deleteProduct(del_product);
+            daoInterface.deleteProduct(del_product);
             return null;
         }
     }
@@ -151,7 +154,7 @@ public class EditProductFragment extends Fragment {
 
         @Override
         protected Product doInBackground(Void... people) {
-            localDatabase.daoAccess().updateProduct(up_product);
+            daoInterface.updateProduct(up_product);
             return up_product;
         }
     }

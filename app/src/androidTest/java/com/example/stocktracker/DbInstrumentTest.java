@@ -2,14 +2,13 @@ package com.example.stocktracker;
 
 import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.database.LocalDatabase;
 import com.example.stocktracker.model.entity.Company;
 import com.example.stocktracker.model.entity.Product;
 

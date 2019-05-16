@@ -2,13 +2,10 @@ package com.example.stocktracker.fragments.company;
 
 import android.arch.lifecycle.Observer;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -29,9 +28,11 @@ import com.example.stocktracker.R;
 import com.example.stocktracker.adapter.CompanyListAdapter;
 import com.example.stocktracker.fragments.product.ProductFragment;
 import com.example.stocktracker.model.DaoImpl;
-import com.example.stocktracker.model.Database.LocalDatabase;
+import com.example.stocktracker.model.DaoInterface;
+import com.example.stocktracker.model.database.DaoRoomImpl;
+import com.example.stocktracker.model.database.LocalDatabase;
+import com.example.stocktracker.model.IDaoUpdateDelegate;
 import com.example.stocktracker.model.entity.Company;
-import com.example.stocktracker.model.entity.Product;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +42,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyListFragment extends Fragment {
+public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate {
 
     // extending list fragment only has or accepts listView nothing else can be defined.also no need of an xml to inflate .
     ListView listView;
@@ -54,54 +55,71 @@ public class CompanyListFragment extends Fragment {
     public static final String COMPANY_FRAGMENT = "company_fragment";
     public static final String DATABASE_NAME = "company_database";
 
-    DaoImpl dao;
-    LocalDatabase localDatabase;
     Context context;
+    DaoInterface daoInterface;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         context = getContext();
-        if(!isNetworkAvailable()){
+        if (!isNetworkAvailable()) {
             Toast.makeText(getContext().getApplicationContext(), "No stock rates, will get your rates once network is back", Toast.LENGTH_LONG).show();
         }
-
-
-        localDatabase = LocalDatabase.getDb(getContext().getApplicationContext());
         checkForDatabase();
-        livedataCheck();   // Room Database live data check
+        //initrun();
+  }
 
-        initrun();
+
+
+    private void fetchCompanies() {
+
+        reload();
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//                companyNames.clear();
+//                companyNames = daoInterface.getAllCompanies();
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void v) {
+//                super.onPostExecute(v);
+//                reload();
+//            }
+//        }.execute();
 
     }
+
 
     private void checkForDatabase() {
 
         File dbFilePath = context.getDatabasePath(DATABASE_NAME);
-        if(!dbFilePath.exists()){
-        dbFilePath.getParentFile().mkdirs();
+        if (!dbFilePath.exists()) {
+            dbFilePath.getParentFile().mkdirs();
 
-        // Try to copy database file
-        try {
-            final InputStream inputStream = context.getAssets().open("data/" + DATABASE_NAME + ".db");
-            final OutputStream output = new FileOutputStream(dbFilePath);
+            // Try to copy database file
+            try {
+                final InputStream inputStream = context.getAssets().open("data/" + DATABASE_NAME + ".db");
+                final OutputStream output = new FileOutputStream(dbFilePath);
 
-            byte[] buffer = new byte[8192];
-            int length;
+                byte[] buffer = new byte[8192];
+                int length;
 
-            while ((length = inputStream.read(buffer, 0, 8192)) > 0) {
-                output.write(buffer, 0, length);
+                while ((length = inputStream.read(buffer, 0, 8192)) > 0) {
+                    output.write(buffer, 0, length);
+                }
+
+                output.flush();
+                output.close();
+                inputStream.close();
+            } catch (IOException e) {
+                Log.d("DB Message", "Failed to open file", e);
+                e.printStackTrace();
             }
-
-            output.flush();
-            output.close();
-            inputStream.close();
-        } catch (IOException e) {
-            Log.d("DB Message", "Failed to open file", e);
-            e.printStackTrace();
-        }
-    }else {
+        } else {
             return;
         }
     }
@@ -114,6 +132,8 @@ public class CompanyListFragment extends Fragment {
         //listview definitions
         listView = view.findViewById(android.R.id.list);
         listView.setEmptyView(view.findViewById(R.id.company_emptyLayout));
+
+        reload();
 
         //Toolbar definitions
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -143,7 +163,6 @@ public class CompanyListFragment extends Fragment {
                 return false;
             }
         });
-
 
         return view;
     }
@@ -250,24 +269,25 @@ public class CompanyListFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        daoInterface = DaoRoomImpl.getInstance(context);
+        //daoInterface = DaoImpl.getInstance();
+
+        daoInterface.addDaoUpdateDelegate(this);
+        daoInterface.getAllCompanies();
+
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
     }
 
-    // room database live data check
-    public void livedataCheck() {
-
-        //database
-        localDatabase.daoAccess().getAllCompanies().observe(CompanyListFragment.this, new Observer<List<Company>>() {
-            @Override
-            public void onChanged(List<Company> companies) {
-                // companies value is returned from database
-                companyNames.clear();
-                companyNames.addAll(companies);
-
-                reload();
-            }
-        });
+    @Override
+    public void onStop() {
+        daoInterface.removeDaoUpdateDelegate(this);
+        super.onStop();
     }
 
     public void reload() {
@@ -280,6 +300,7 @@ public class CompanyListFragment extends Fragment {
         }
 
     }
+
     public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -291,19 +312,31 @@ public class CompanyListFragment extends Fragment {
         }
     }
 
-    public void initrun(){
-        final Handler handler= new Handler();
-        final int timer= 60000;
-        final long[] i = {0};
+    public void initrun() {
+        final Handler handler = new Handler();
+        final int timer = 60000;
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 companyListAdapter.notifyDataSetChanged();
-                Log.d(" n times", String.valueOf(i[0]++));
-                handler.postDelayed(this,timer);
+                handler.postDelayed(this, timer);
             }
-        },timer);
+        }, timer);
+    }
+
+    @Override
+    public void onUpdateResult(int resultCode, Object result) {
+
+        if(resultCode==1) {
+            companyNames.clear();
+            companyNames.addAll((List<Company>) result);
+            reload();
+           // this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+        }
     }
 }
 
