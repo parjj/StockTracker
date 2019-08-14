@@ -2,23 +2,17 @@ package com.example.stocktracker.adapter;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.stocktracker.R;
 import com.example.stocktracker.model.entity.Company;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -34,16 +28,17 @@ public class GetStockRate extends AsyncTask<Void, Void, Company> {
     private static String[] API_KEYS = {"MP77SPA5MSCPB839", "06TZZOMBWPSZNJKE", " PK3HSW2RKTGHSHF6"};
 
     Company company;
-    View convertView;
+    CompanyRecyclerAdapter.CompanyViewHolder convertView;
     Context context;
 
     Double rate_value = null;
 
-    public GetStockRate(Company company, View view, Context context) {
+    public GetStockRate(Company company, CompanyRecyclerAdapter.CompanyViewHolder viewHolder, Context context) {
         this.company = company;
-        this.convertView = view;
+        this.convertView = viewHolder;
         this.context = context;
-        this.convertView.setTag(this.company.getId());
+
+        //this.convertView.setTag(this.company.getId());
     }
 
     @Override
@@ -101,24 +96,21 @@ public class GetStockRate extends AsyncTask<Void, Void, Company> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        ImageView imageView = convertView.findViewById(R.id.icon);
-        Picasso.get().load(company.getUrl()).resize(128, 128).into(imageView);
 
-        TextView text_name = convertView.findViewById(R.id.company_name);
-        TextView text_code = convertView.findViewById(R.id.company_code);
+        Picasso.get().load(company.getUrl()).resize(128, 128).into(convertView.imageView);
 
-        text_name.setText(company.getCompany_name());
-        text_code.setText("(" + company.getCompany_stockName() + ")");
-        text_name.setText(company.getCompany_name());
+        convertView.text_name.setText(company.getCompany_name());
+        convertView.text_code.setText("(" + company.getCompany_stockName() + ")");
+        convertView.text_name.setText(company.getCompany_name());
     }
 
     @Override
     protected void onPostExecute(Company company) {
 
-        if(convertView.getTag()==company.getId()){
-            TextView text_rate = convertView.findViewById(R.id.rate);
+        if(convertView.text_name.getTag()==company.getCompany_name()){
+
             double d = company.getRate();
-            text_rate.setText("Rate: $" + d);
+            convertView.text_rate.setText("Rate: $" + d);
         }
 
      }

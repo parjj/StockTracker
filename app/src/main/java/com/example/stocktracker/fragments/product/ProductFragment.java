@@ -79,7 +79,10 @@ public class ProductFragment extends Fragment implements IDaoUpdateDelegate {
         View view = inflater.inflate(R.layout.product_page_layout, container, false);
 
         // the company selected
-        company = companyListFragment.company_main;
+     //   company = companyListFragment.company_main;
+
+        Bundle bundle= getArguments();
+        company= (Company) bundle.get("company_values");
         companyID = company.getId();
 
         if (productNames == null) {

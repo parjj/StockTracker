@@ -50,7 +50,8 @@ public class EditCompanyFragment extends Fragment {
         View view = inflater.inflate(R.layout.edit_company_layout, container, false);
 
         bundle = getArguments();
-        int pos = bundle.getInt("position");
+      //  int pos = bundle.getInt("position");
+        int pos = bundle.getInt("selected_position");
         company = companyListFragment.companyNames.get(pos);
         company_id = company.getId();
 

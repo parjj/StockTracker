@@ -9,7 +9,10 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,14 +22,18 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.example.stocktracker.R;
-import com.example.stocktracker.adapter.CompanyListAdapter;
+import com.example.stocktracker.adapter.CompanyRecyclerAdapter;
 import com.example.stocktracker.fragments.product.ProductFragment;
+import com.example.stocktracker.helper.ItemTouchHelperAdapter;
+import com.example.stocktracker.helper.OnstartDragListener;
+import com.example.stocktracker.helper.SimpleItemTouchHelperCallback;
 import com.example.stocktracker.model.DaoImpl;
 import com.example.stocktracker.model.DaoInterface;
 import com.example.stocktracker.model.database.DaoRoomImpl;
@@ -42,21 +49,22 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate {
+public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate, OnstartDragListener {
 
     // extending list fragment only has or accepts listView nothing else can be defined.also no need of an xml to inflate .
-    ListView listView;
-    CompanyListAdapter companyListAdapter;
+    RecyclerView recyclerView;
+    CompanyRecyclerAdapter companyRecyclerAdapter;
+    LinearLayoutManager linearLayoutManager;
+    CompanyRecyclerAdapter.CompanyViewHolder companyViewHolder;
     public List<Company> companyNames = new ArrayList<>();
 
-    public Company company_main;
     Button toolbar_button;
-
-    public static final String COMPANY_FRAGMENT = "company_fragment";
     public static final String DATABASE_NAME = "company_database";
 
     Context context;
     DaoInterface daoInterface;
+
+    private ItemTouchHelper mItemTouchHelper;
 
 
     @Override
@@ -68,31 +76,7 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
             Toast.makeText(getContext().getApplicationContext(), "No stock rates, will get your rates once network is back", Toast.LENGTH_LONG).show();
         }
         checkForDatabase();
-        //initrun();
-  }
-
-
-
-    private void fetchCompanies() {
-
-        reload();
-//        new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//                companyNames.clear();
-//                companyNames = daoInterface.getAllCompanies();
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void v) {
-//                super.onPostExecute(v);
-//                reload();
-//            }
-//        }.execute();
-
     }
-
 
     private void checkForDatabase() {
 
@@ -129,11 +113,20 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
 
         View view = inflater.inflate(R.layout.company_list, container, false);
 
-        //listview definitions
-        listView = view.findViewById(android.R.id.list);
-        listView.setEmptyView(view.findViewById(R.id.company_emptyLayout));
+        //recyclerView definitions
+        recyclerView = view.findViewById(R.id.recyclerView);
+        // recyclerView.setE
+        linearLayoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
 
         reload();
+
+        //drag and swipe recycler view
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(companyRecyclerAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerView);
+
 
         //Toolbar definitions
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -172,33 +165,8 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
 
         super.onActivityCreated(savedInstanceState);
 
-        // on company click goes to the products page of that chosen comapny
-        listViewListner();
-
         //Edit functionality of the whole company list
         toolbarListener();
-    }
-
-    //listview click listener
-    public void listViewListner() {
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("selected_position", position);
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                company_main = (Company) listView.getItemAtPosition(position);
-                ProductFragment productFragment = new ProductFragment();
-                fragmentTransaction.add(R.id.fragment_container, productFragment, "prod_list");
-                productFragment.setArguments(bundle);
-                fragmentTransaction.addToBackStack(COMPANY_FRAGMENT);
-                fragmentTransaction.commit();
-            }
-        });
     }
 
     //toolbar button click listener
@@ -222,8 +190,9 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
     public void editToDoneCall() {
 
         toolbar_button.setText("Done");
-        listView.setBackgroundResource(R.color.lightPink);
-        companyListAdapter.visible = View.VISIBLE;
+        recyclerView.setBackgroundResource(R.color.lightPink);
+        companyRecyclerAdapter.visible = View.VISIBLE;
+
         reload();
         editCompanyFragmentCall();
     }
@@ -234,9 +203,9 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
         // done button
         toolbar_button.setText("Edit");
         toolbar_button.setClickable(true);
-        listView.setBackgroundResource(R.color.white);
-        companyListAdapter.visible = View.GONE;
-        listViewListner();
+        recyclerView.setBackgroundResource(R.color.white);
+        companyRecyclerAdapter.visible = View.GONE;
+        // listViewListner();
         toolbarListener();
         reload();
     }
@@ -244,23 +213,7 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
     //edit functionality
     public void editCompanyFragmentCall() {
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("position", position);
-
-                //show all the list and on select give your edit options
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                EditCompanyFragment editCompanyFragment = new EditCompanyFragment();
-                fragmentTransaction.add(R.id.fragment_container, editCompanyFragment);
-                editCompanyFragment.setArguments(bundle);
-                fragmentTransaction.addToBackStack("company_list_edit");  // when you click delete from edit company and this line isn't defined the page doesn't come  back
-                fragmentTransaction.commit();
-
-            }
-        });
+            companyRecyclerAdapter.setValue=0;
     }
 
     @Override
@@ -272,8 +225,6 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
     public void onStart() {
         super.onStart();
         daoInterface = DaoRoomImpl.getInstance(context);
-        //daoInterface = DaoImpl.getInstance();
-
         daoInterface.addDaoUpdateDelegate(this);
         daoInterface.getAllCompanies();
 
@@ -291,12 +242,12 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
     }
 
     public void reload() {
-        if (companyListAdapter == null) {
-            companyListAdapter = new CompanyListAdapter(getContext(), companyNames);
-            listView.setAdapter(companyListAdapter);
+        if (companyRecyclerAdapter == null) {
+            companyRecyclerAdapter = new CompanyRecyclerAdapter(context, companyNames, this);
+            recyclerView.setAdapter(companyRecyclerAdapter);
         } else {
-            companyListAdapter.notifyDataSetChanged();
 
+            companyRecyclerAdapter.notifyDataSetChanged();
         }
 
     }
@@ -312,31 +263,25 @@ public class CompanyListFragment extends Fragment implements IDaoUpdateDelegate 
         }
     }
 
-    public void initrun() {
-        final Handler handler = new Handler();
-        final int timer = 60000;
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                companyListAdapter.notifyDataSetChanged();
-                handler.postDelayed(this, timer);
-            }
-        }, timer);
-    }
-
     @Override
     public void onUpdateResult(int resultCode, Object result) {
 
-        if(resultCode==1) {
+        if (resultCode == 1) {
             companyNames.clear();
             companyNames.addAll((List<Company>) result);
             reload();
-           // this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            // this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
         }
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+
+        Log.d("onStartDrag", "onStartDrag");
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }
 
